@@ -102,15 +102,6 @@ function masc_tel($TEL) {
             <option value="CeroSFI">Cero São Francisco</option>
           </select>  
         </form>
-        <!--<p>Inserir nome do atendente?</p>
-        <form>
-          <select id="api" name="whatsappId">
-            <option value="">Não</option>
-            <option value="Att, Daiana">Daiana</option>
-            <option value="Att, Fátima">Fátima</option>
-            <option value="Att, Thalia">Thalia</option>
-          </select>  
-        </form>-->
               <script>
       var select = document.getElementById('api')
 
@@ -154,7 +145,7 @@ curl_setopt_array($curl, [
   CURLOPT_CUSTOMREQUEST => "POST",
   CURLOPT_POSTFIELDS => $json,
   CURLOPT_HTTPHEADER => [
-    "Authorization: Bearer 888ede73-062a-4a39-875a-d18faffe3baf",
+    "Authorization: Bearer YOUR WHATICKET BACKEND TOKEN",
     "Content-Type: application/json"
   ],
 ]);
