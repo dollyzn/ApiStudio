@@ -7,15 +7,23 @@ body {
   -webkit-font-smoothing: antialiased;
   margin: 0;
 }
-.container {
+
+.header {
   padding: 5px;
   background: linear-gradient(to right, #050505, #c90003);
   text-align: center;
   color: white;
+  height: 13.5vh;
+}
+
+.header h1 {
+  position: relative;
+  top: 50%;
+  transform: translateY(-80%);
 }
 
 .select {
-  padding: 20px;
+  padding-top: 20px;
   text-align: center;
 }
 
@@ -31,57 +39,58 @@ body {
   margin-bottom: 5px;
 }
 
-.col {
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 7px 5px 5px 5px;
-  display: block;
-  margin: 0 auto;
-  flex-direction: column;
-  font-size: 15pt;
-  border-radius: 100px;
-  width: 150px;
-  height: 40px;
-  color: black;
-  background-color: #ffffff;
-  text-decoration: none;
-}
-
-.num {
+.info {
   text-align: center;
   font-size: 15pt;
 }
 
 .body {
-  max-width: 700px;
+  font-weight: bold;
+  font-size: 15pt;
   justify-content: center;
   text-align: center;
   display: flex;
   margin: 0 auto;
-  padding-top: 20px;
-  padding-bottom: 5px;
+  margin-bottom: 20px;
   border-bottom: 1px solid black;
-  margin-bottom: 30px;
+  max-width: 700px;
 }
 
-.enviar {
+#container2 {
+  display: none;
+}
+
+#container3 {
+  display: none;
+}
+
+.submit {
   align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 13px 5px 5px 5px;
+  padding: 5px;
   display: block;
   margin: 0 auto;
-  flex-direction: column;
   font-size: 20pt;
   border-radius: 100px;
   width: 200px;
   height: 60px;
   color: white;
   background-color: #128c7e;
-  text-decoration: none;
 }
 
-.zap {
-  padding-bottom: 20px;
+@keyframes end {
+  from {
+    height: 13.5vh;
+  }
+  to {
+    height: 100vh;
+  }
+}
+
+@keyframes end2 {
+  from {
+    opacity: 100;
+  }
+  to {
+    opacity: 0;
+  }
 }
