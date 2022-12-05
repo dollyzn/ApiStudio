@@ -151,8 +151,8 @@ include("includes/functions.php");
       />
             </div>
     </main>
-    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/jquery-3.6.1.min.js"></script>
+    <script src="js/sweetalert2.all.min.js"></script>
     <script src="js/script.js"></script>
     <script>
       ftdnum = "<?=$ftdnum?>";
