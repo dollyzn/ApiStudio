@@ -2,7 +2,7 @@
 
 Este repositório foi feito com base no código do sistema de WhatsApp CRM multi user [Whaticket](http://github.com/dollyzn/whaticket-cero), podendo utilizar-se dos releases disponíveis ou editar o código e personalizá-lo como preferir.
 
-Caso possua alguma sugestão de melhoria, fique a vontade de criar um pull request!
+Caso possua alguma sugestão de melhoria, fique a vontade para criar um pull request!
 
 ----
 
