@@ -100,6 +100,13 @@ function sendMessage(type) {
                   denyButtonColor: "#C90056",
                   confirmButtonText: "Sim!",
                   denyButtonText: "Não",
+                  showClass: {
+                    popup: "animate__animated animate__fadeInDown",
+                  },
+                  hideClass: {
+                    popup: "animate__animated animate__fadeOutUp",
+                  },
+                  allowOutsideClick: false,
                 }).then((result) => {
                   if (result.isConfirmed) {
                     document.querySelector("title").innerText =
@@ -118,6 +125,13 @@ function sendMessage(type) {
                       denyButtonColor: "#C90056",
                       confirmButtonText: "Sim!",
                       denyButtonText: "Não",
+                      showClass: {
+                        popup: "animate__animated animate__fadeInDown",
+                      },
+                      hideClass: {
+                        popup: "animate__animated animate__fadeOutUp",
+                      },
+                      allowOutsideClick: false,
                     }).then((result) => {
                       if (result.isConfirmed) {
                         document.querySelector("title").innerText =
@@ -135,6 +149,13 @@ function sendMessage(type) {
                           icon: "success",
                           confirmButtonColor: "#2e9e60",
                           confirmButtonText: "OK",
+                          showClass: {
+                            popup: "animate__animated animate__fadeInDown",
+                          },
+                          hideClass: {
+                            popup: "animate__animated animate__fadeOutUp",
+                          },
+                          allowOutsideClick: false,
                         }).then((result) => {
                           if (result.isConfirmed) {
                             document.getElementById("container1").style =
@@ -159,6 +180,26 @@ function sendMessage(type) {
                   text: "Talvez o WhatsApp esteja desconectado.",
                   confirmButtonColor: "#C90056",
                   icon: "error",
+                  showClass: {
+                    popup: "animate__animated animate__fadeInDown",
+                  },
+                  hideClass: {
+                    popup: "animate__animated animate__fadeOutUp",
+                  },
+                });
+                break;
+              case "ERR_WAPP_INVALID_CONTACT":
+                Swal.fire({
+                  title: "Ocorreu um erro!",
+                  text: "Verifique o número do paciente.",
+                  confirmButtonColor: "#C90056",
+                  icon: "error",
+                  showClass: {
+                    popup: "animate__animated animate__fadeInDown",
+                  },
+                  hideClass: {
+                    popup: "animate__animated animate__fadeOutUp",
+                  },
                 });
                 break;
               default:
@@ -170,6 +211,12 @@ function sendMessage(type) {
               text: e,
               confirmButtonColor: "#C90056",
               icon: "error",
+              showClass: {
+                popup: "animate__animated animate__fadeInDown",
+              },
+              hideClass: {
+                popup: "animate__animated animate__fadeOutUp",
+              },
             });
           }
         },
@@ -190,8 +237,16 @@ function sendMessage(type) {
                   Swal.fire({
                     title: "Opa!",
                     text: "Esta unidade não possui mensagem de feedback configurada.",
+                    showCancelButton: true,
                     confirmButtonColor: "#2e9e60",
+                    cancelButtonText: "Voltar",
                     icon: "info",
+                    showClass: {
+                      popup: "animate__animated animate__fadeInDown",
+                    },
+                    hideClass: {
+                      popup: "animate__animated animate__fadeOutUp",
+                    },
                   }).then((result) => {
                     if (result.isConfirmed) {
                       Swal.fire({
@@ -203,6 +258,13 @@ function sendMessage(type) {
                         denyButtonColor: "#C90056",
                         confirmButtonText: "Sim!",
                         denyButtonText: "Não",
+                        showClass: {
+                          popup: "animate__animated animate__fadeInDown",
+                        },
+                        hideClass: {
+                          popup: "animate__animated animate__fadeOutUp",
+                        },
+                        allowOutsideClick: false,
                       }).then((result) => {
                         if (result.isConfirmed) {
                           document.querySelector("title").innerText =
@@ -218,6 +280,13 @@ function sendMessage(type) {
                             icon: "success",
                             confirmButtonColor: "#2e9e60",
                             confirmButtonText: "OK",
+                            showClass: {
+                              popup: "animate__animated animate__fadeInDown",
+                            },
+                            hideClass: {
+                              popup: "animate__animated animate__fadeOutUp",
+                            },
+                            allowOutsideClick: false,
                           }).then((result) => {
                             if (result.isConfirmed) {
                               document.getElementById("container1").style =
@@ -233,13 +302,6 @@ function sendMessage(type) {
                           });
                         }
                       });
-                    } else if (result.isDenied) {
-                      Swal.fire({
-                        title: "Ocorreu um erro!",
-                        text: e,
-                        confirmButtonColor: "#C90056",
-                        icon: "error",
-                      });
                     }
                   });
                 } else {
@@ -252,6 +314,13 @@ function sendMessage(type) {
                     denyButtonColor: "#C90056",
                     confirmButtonText: "Sim!",
                     denyButtonText: "Não",
+                    showClass: {
+                      popup: "animate__animated animate__fadeInDown",
+                    },
+                    hideClass: {
+                      popup: "animate__animated animate__fadeOutUp",
+                    },
+                    allowOutsideClick: false,
                   }).then((result) => {
                     if (result.isConfirmed) {
                       document.querySelector("title").innerText =
@@ -267,6 +336,13 @@ function sendMessage(type) {
                         icon: "success",
                         confirmButtonColor: "#2e9e60",
                         confirmButtonText: "OK",
+                        showClass: {
+                          popup: "animate__animated animate__fadeInDown",
+                        },
+                        hideClass: {
+                          popup: "animate__animated animate__fadeOutUp",
+                        },
+                        allowOutsideClick: false,
                       }).then((result) => {
                         if (result.isConfirmed) {
                           document.getElementById("container1").style =
@@ -293,6 +369,12 @@ function sendMessage(type) {
               text: e,
               confirmButtonColor: "#C90056",
               icon: "error",
+              showClass: {
+                popup: "animate__animated animate__fadeInDown",
+              },
+              hideClass: {
+                popup: "animate__animated animate__fadeOutUp",
+              },
             });
           }
         },
@@ -315,9 +397,18 @@ function sendMessage(type) {
                   icon: "success",
                   confirmButtonColor: "#2e9e60",
                   confirmButtonText: "OK",
+                  showClass: {
+                    popup: "animate__animated animate__fadeInDown",
+                  },
+                  hideClass: {
+                    popup: "animate__animated animate__fadeOutUp",
+                  },
+                  allowOutsideClick: false,
                 }).then((result) => {
                   if (result.isConfirmed) {
                     document.getElementById("container1").style =
+                      "display: none";
+                    document.getElementById("container2").style =
                       "display: none";
                     document.getElementById("container3").style =
                       "display: none";
@@ -336,6 +427,12 @@ function sendMessage(type) {
               text: e,
               confirmButtonColor: "#C90056",
               icon: "error",
+              showClass: {
+                popup: "animate__animated animate__fadeInDown",
+              },
+              hideClass: {
+                popup: "animate__animated animate__fadeOutUp",
+              },
             });
           }
         },
@@ -371,6 +468,12 @@ window.onload = function showNumber() {
         text: "Verifique o número do paciente.",
         confirmButtonColor: "#C90056",
         icon: "error",
+        showClass: {
+          popup: "animate__animated animate__fadeInDown",
+        },
+        hideClass: {
+          popup: "animate__animated animate__fadeOutUp",
+        },
       });
     }
   }
@@ -380,3 +483,23 @@ window.onload = function showNumber() {
   document.querySelector(".body").innerText =
     sessionStorage.getItem("formatedBody");
 };
+
+$(document).on({
+  ajaxStart: function () {
+    Swal.fire({
+      title: "Processando...",
+      text: "Por favor, aguarde!",
+      showClass: {
+        popup: "animate__animated animate__fadeInDown",
+      },
+      hideClass: {
+        popup: "animate__animated animate__fadeOutUp",
+      },
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+        const b = Swal.getHtmlContainer().querySelector("b");
+      },
+    });
+  },
+});
