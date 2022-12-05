@@ -452,7 +452,12 @@ window.onload = function showNumber() {
       sessionStorage.setItem("formatedBody", ftdbody);
       sessionStorage.setItem("formatedNum", ftdnum);
       sessionStorage.setItem("body", text);
-      sessionStorage.setItem("number", num);
+      sessionStorage
+        .setItem("number", num)
+        .replace("(", "")
+        .replace(")", "")
+        .replace("-", "")
+        .replace(" ", "");
 
       if (
         sessionStorage.getItem("number").includes("(") ||
