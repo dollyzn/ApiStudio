@@ -123,7 +123,7 @@ include("includes/functions.php");
           <select id="whatsapp3" required>
             <option value="">Selecione</option>
             <?php
-              $query = $conn->query("SELECT id, name FROM Users ORDER BY id ASC");
+              $query = $conn->query("SELECT id, name FROM Users ORDER BY name ASC");
               $registros = $query->fetchAll(PDO::FETCH_ASSOC);
 
               foreach($registros as $option){
