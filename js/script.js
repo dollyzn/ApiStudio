@@ -1,10 +1,10 @@
 function changeWhatsapp(type) {
   var name = sessionStorage.getItem("name");
-  var value = sessionStorage.getItem("whatsappId");
+  var id = sessionStorage.getItem("whatsappId");
 
   switch (type) {
     case 1:
-      if (value === "") {
+      if (name === "Selecione") {
         document.getElementById("name").innerText = "Não definido";
         document.getElementById("name").style = "color: red";
       } else {
@@ -13,7 +13,7 @@ function changeWhatsapp(type) {
       }
       break;
     case 2:
-      if (value === "") {
+      if (name === "Selecione") {
         document.getElementById("name2").innerText = "Não definido";
         document.getElementById("name2").style = "color: red";
       } else {
@@ -22,7 +22,7 @@ function changeWhatsapp(type) {
       }
       break;
     case 3:
-      if (value === "") {
+      if (name === "Selecione") {
         document.getElementById("name3").innerText = "Não definido";
         document.getElementById("name3").style = "color: red";
       } else {
@@ -49,43 +49,43 @@ $("#whatsappSelect3").submit(function (e) {
 });
 
 $("#whatsapp").change(function () {
-  var option = $("#whatsapp").find(":selected").text();
-  var value = $("#whatsapp").find(":selected").val();
+  var name = $("#whatsapp").find(":selected").text();
+  var id = $("#whatsapp").find(":selected").val();
 
-  sessionStorage.setItem("name", option);
-  sessionStorage.setItem("whatsappId", value);
+  sessionStorage.setItem("name", name);
+  sessionStorage.setItem("whatsappId", id);
   changeWhatsapp(1);
 });
 
 $("#whatsapp2").change(function () {
-  var option = $("#whatsapp2").find(":selected").text();
-  var value = $("#whatsapp2").find(":selected").val();
+  var name = $("#whatsapp2").find(":selected").text();
+  var feedbackMessage = $("#whatsapp2").find(":selected").val();
 
-  sessionStorage.setItem("name", option);
-  sessionStorage.setItem("body", value);
+  sessionStorage.setItem("name", name);
+  sessionStorage.setItem("body", feedbackMessage);
   changeWhatsapp(2);
 });
 
 $("#whatsapp3").change(function () {
-  var option = $("#whatsapp3").find(":selected").text();
-  var value = $("#whatsapp3").find(":selected").val();
+  var name = $("#whatsapp3").find(":selected").text();
+  var attendantMessage = $("#whatsapp3").find(":selected").val();
 
-  sessionStorage.setItem("name", option);
-  sessionStorage.setItem("body", value);
+  sessionStorage.setItem("name", name);
+  sessionStorage.setItem("body", attendantMessage);
   changeWhatsapp(3);
 });
 
 function sendMessage(type) {
   var number = sessionStorage.getItem("number");
-  var texto = sessionStorage.getItem("body");
-  var zapid = sessionStorage.getItem("whatsappId");
+  var body = sessionStorage.getItem("body");
+  var whatsappId = sessionStorage.getItem("whatsappId");
 
   switch (type) {
     case 1:
       $.ajax({
         method: "POST",
         url: "includes/api.php",
-        data: { number: number, body: texto, whatsappId: zapid },
+        data: { number: number, body: body, whatsappId: whatsappId },
         success: function (response) {
           try {
             result = JSON.parse(response);
@@ -109,12 +109,8 @@ function sendMessage(type) {
                   allowOutsideClick: false,
                 }).then((result) => {
                   if (result.isConfirmed) {
-                    document.querySelector("title").innerText =
-                      "Enviar Feedback";
-                    document.getElementById("container1").style =
-                      "display: none";
-                    document.getElementById("container2").style =
-                      "display: block";
+                    sessionStorage.removeItem("body");
+                    setFeedbackSelectVisible();
                   } else if (result.isDenied) {
                     Swal.fire({
                       title: "Certo!",
@@ -134,14 +130,8 @@ function sendMessage(type) {
                       allowOutsideClick: false,
                     }).then((result) => {
                       if (result.isConfirmed) {
-                        document.querySelector("title").innerText =
-                          "Enviar Nome do Atendente";
-                        document.getElementById("container1").style =
-                          "display: none";
-                        document.getElementById("container2").style =
-                          "display: none";
-                        document.getElementById("container3").style =
-                          "display: block";
+                        sessionStorage.removeItem("body");
+                        setAttendantSelectVisible();
                       } else if (result.isDenied) {
                         Swal.fire({
                           title: "Ok!!",
@@ -158,15 +148,7 @@ function sendMessage(type) {
                           allowOutsideClick: false,
                         }).then((result) => {
                           if (result.isConfirmed) {
-                            document.getElementById("container1").style =
-                              "display: none";
-                            document.getElementById("container2").style =
-                              "display: none";
-                            document.getElementById("container3").style =
-                              "display: none";
-
-                            document.querySelector(".header").style =
-                              "animation: end 8s 1s forwards, end2 5s 10s forwards;";
+                            closeAll();
                           }
                         });
                       }
@@ -226,139 +208,53 @@ function sendMessage(type) {
       $.ajax({
         method: "POST",
         url: "includes/api.php",
-        data: { number: number, body: texto, whatsappId: zapid },
+        data: { number: number, body: body, whatsappId: whatsappId },
         crossDomain: true,
         success: function (response) {
           try {
             result = JSON.parse(response);
             switch (result.error) {
               case "SUCCESS":
-                if (texto === "") {
-                  Swal.fire({
-                    title: "Opa!",
-                    text: "Esta unidade não possui mensagem de feedback configurada.",
-                    showCancelButton: true,
-                    confirmButtonColor: "#2e9e60",
-                    cancelButtonText: "Voltar",
-                    icon: "info",
-                    showClass: {
-                      popup: "animate__animated animate__fadeInDown",
-                    },
-                    hideClass: {
-                      popup: "animate__animated animate__fadeOutUp",
-                    },
-                  }).then((result) => {
-                    if (result.isConfirmed) {
-                      Swal.fire({
-                        title: "Certo!",
-                        text: "Enviar nome do atendente?",
-                        icon: "success",
-                        showDenyButton: true,
-                        confirmButtonColor: "#2e9e60",
-                        denyButtonColor: "#C90056",
-                        confirmButtonText: "Sim!",
-                        denyButtonText: "Não",
-                        showClass: {
-                          popup: "animate__animated animate__fadeInDown",
-                        },
-                        hideClass: {
-                          popup: "animate__animated animate__fadeOutUp",
-                        },
-                        allowOutsideClick: false,
-                      }).then((result) => {
-                        if (result.isConfirmed) {
-                          document.querySelector("title").innerText =
-                            "Enviar Nome do Atendente";
-                          document.getElementById("container2").style =
-                            "display: none";
-                          document.getElementById("container3").style =
-                            "display: block";
-                        } else if (result.isDenied) {
-                          Swal.fire({
-                            title: "Ok!",
-                            text: "Todas as mensagens foram enviadas com sucesso!",
-                            icon: "success",
-                            confirmButtonColor: "#2e9e60",
-                            confirmButtonText: "OK",
-                            showClass: {
-                              popup: "animate__animated animate__fadeInDown",
-                            },
-                            hideClass: {
-                              popup: "animate__animated animate__fadeOutUp",
-                            },
-                            allowOutsideClick: false,
-                          }).then((result) => {
-                            if (result.isConfirmed) {
-                              document.getElementById("container1").style =
-                                "display: none";
-                              document.getElementById("container2").style =
-                                "display: none";
-                              document.getElementById("container3").style =
-                                "display: none";
-
-                              document.querySelector(".header").style =
-                                "animation: end 8s 1s forwards, end2 5s 10s forwards;";
-                            }
-                          });
-                        }
-                      });
-                    }
-                  });
-                } else {
-                  Swal.fire({
-                    title: "Mensagem enviada com sucesso!",
-                    text: "Enviar nome do atendente?",
-                    icon: "success",
-                    showDenyButton: true,
-                    confirmButtonColor: "#2e9e60",
-                    denyButtonColor: "#C90056",
-                    confirmButtonText: "Sim!",
-                    denyButtonText: "Não",
-                    showClass: {
-                      popup: "animate__animated animate__fadeInDown",
-                    },
-                    hideClass: {
-                      popup: "animate__animated animate__fadeOutUp",
-                    },
-                    allowOutsideClick: false,
-                  }).then((result) => {
-                    if (result.isConfirmed) {
-                      document.querySelector("title").innerText =
-                        "Enviar Nome do Atendente";
-                      document.getElementById("container2").style =
-                        "display: none";
-                      document.getElementById("container3").style =
-                        "display: block";
-                    } else if (result.isDenied) {
-                      Swal.fire({
-                        title: "Ok!",
-                        text: "Todas as mensagens foram enviadas com sucesso!",
-                        icon: "success",
-                        confirmButtonColor: "#2e9e60",
-                        confirmButtonText: "OK",
-                        showClass: {
-                          popup: "animate__animated animate__fadeInDown",
-                        },
-                        hideClass: {
-                          popup: "animate__animated animate__fadeOutUp",
-                        },
-                        allowOutsideClick: false,
-                      }).then((result) => {
-                        if (result.isConfirmed) {
-                          document.getElementById("container1").style =
-                            "display: none";
-                          document.getElementById("container2").style =
-                            "display: none";
-                          document.getElementById("container3").style =
-                            "display: none";
-
-                          document.querySelector(".header").style =
-                            "animation: end 8s 1s forwards, end2 5s 10s forwards;";
-                        }
-                      });
-                    }
-                  });
-                }
+                Swal.fire({
+                  title: "Mensagem enviada com sucesso!",
+                  text: "Enviar nome do atendente?",
+                  icon: "success",
+                  showDenyButton: true,
+                  confirmButtonColor: "#2e9e60",
+                  denyButtonColor: "#C90056",
+                  confirmButtonText: "Sim!",
+                  denyButtonText: "Não",
+                  showClass: {
+                    popup: "animate__animated animate__fadeInDown",
+                  },
+                  hideClass: {
+                    popup: "animate__animated animate__fadeOutUp",
+                  },
+                  allowOutsideClick: false,
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    setAttendantSelectVisible();
+                  } else if (result.isDenied) {
+                    Swal.fire({
+                      title: "Ok!",
+                      text: "Todas as mensagens foram enviadas com sucesso!",
+                      icon: "success",
+                      confirmButtonColor: "#2e9e60",
+                      confirmButtonText: "OK",
+                      showClass: {
+                        popup: "animate__animated animate__fadeInDown",
+                      },
+                      hideClass: {
+                        popup: "animate__animated animate__fadeOutUp",
+                      },
+                      allowOutsideClick: false,
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        closeAll();
+                      }
+                    });
+                  }
+                });
                 break;
               default:
                 throw result.error;
@@ -384,7 +280,7 @@ function sendMessage(type) {
       $.ajax({
         method: "POST",
         url: "includes/api.php",
-        data: { number: number, body: texto, whatsappId: zapid },
+        data: { number: number, body: body, whatsappId: whatsappId },
         crossDomain: true,
         success: function (response) {
           try {
@@ -406,15 +302,7 @@ function sendMessage(type) {
                   allowOutsideClick: false,
                 }).then((result) => {
                   if (result.isConfirmed) {
-                    document.getElementById("container1").style =
-                      "display: none";
-                    document.getElementById("container2").style =
-                      "display: none";
-                    document.getElementById("container3").style =
-                      "display: none";
-
-                    document.querySelector(".header").style =
-                      "animation: end 8s 1s forwards, end2 5s 10s forwards;";
+                    closeAll();
                   }
                 });
                 break;
@@ -441,47 +329,62 @@ function sendMessage(type) {
   }
 }
 
-window.onload = function showNumber() {
-  if (
-    !sessionStorage.getItem("formatedNum") ||
-    !sessionStorage.getItem("formatedBody") ||
-    !sessionStorage.getItem("body") ||
-    !sessionStorage.getItem("number")
-  ) {
-    try {
-      sessionStorage.setItem("formatedBody", ftdbody);
-      sessionStorage.setItem("formatedNum", ftdnum);
-      sessionStorage.setItem("body", text);
-      sessionStorage
-        .setItem("number", num)
-        .replace("(", "")
-        .replace(")", "")
-        .replace("-", "")
-        .replace(" ", "");
+function populate_Storage() {
+  sessionStorage.clear();
 
-      if (
-        sessionStorage.getItem("number").includes("(") ||
-        sessionStorage.getItem("number").includes(")") ||
-        sessionStorage.getItem("number").includes("-") ||
-        sessionStorage.getItem("number").length < 12
-      ) {
-        throw "error";
-      }
-    } catch {
-      Swal.fire({
-        title: "Ocorreu um erro!",
-        text: "Verifique o número do paciente.",
-        confirmButtonColor: "#C90056",
-        icon: "error",
-        showClass: {
-          popup: "animate__animated animate__fadeInDown",
-        },
-        hideClass: {
-          popup: "animate__animated animate__fadeOutUp",
-        },
-      });
+  try {
+    sessionStorage.setItem("formatedBody", formatedMessage);
+    sessionStorage.setItem("formatedNum", formatedNumber);
+    sessionStorage.setItem("body", message);
+    sessionStorage.setItem("number", contact);
+
+    if (!$.isNumeric(sessionStorage.getItem("number"))) {
+      throw "error";
     }
+  } catch {
+    Swal.fire({
+      title: "Ocorreu um erro!",
+      text: "Verifique o número do paciente.",
+      confirmButtonColor: "#C90056",
+      icon: "error",
+      showClass: {
+        popup: "animate__animated animate__fadeInDown",
+      },
+      hideClass: {
+        popup: "animate__animated animate__fadeOutUp",
+      },
+    });
   }
+}
+
+function setFeedbackSelectVisible() {
+  document.querySelector("title").innerText = "Enviar Feedback";
+  document.getElementById("container1").style = "display: none";
+  document.getElementById("container2").style = "display: block";
+  document.getElementById("container3").style = "display: none";
+}
+
+function setAttendantSelectVisible() {
+  document.querySelector("title").innerText = "Enviar Nome do Atendente";
+  document.getElementById("container1").style = "display: none";
+  document.getElementById("container2").style = "display: none";
+  document.getElementById("container3").style = "display: block";
+}
+
+function closeAll() {
+  sessionStorage.clear();
+  document.querySelector("title").innerText = "Finalizado";
+  document.getElementById("container1").style = "display: none";
+  document.getElementById("container2").style = "display: none";
+  document.getElementById("container3").style = "display: none";
+
+  document.querySelector(".header").style =
+    "animation: end 8s 1s forwards, end2 5s 10s forwards;";
+}
+
+window.onload = function showNumber() {
+  populate_Storage();
+
   document.getElementById("ftdnum").innerText =
     sessionStorage.getItem("formatedNum");
 

@@ -4,19 +4,10 @@ include("includes/functions.php");
 ?>
 
 <?php
-      if(isset($_GET['number'])){
-         $num = $_GET['number'];
-         $ftdnum = masc_tel($num);
-      } else {
-         $num = "Não definido";
-         $ftdnum = "Não definido";
-      } if(isset($_GET['body'])){
-         $body = $_GET['body'];
-         $ftdbody = str_replace("[[[", " ", $body);
-      } else {
-         $body = "Mensagem não definida";
-         $ftdbody = "Mensagem não definida";
-      }
+$num = verify_number($_GET['number']);
+$ftdnum = masc_tel($num);
+$body = $_GET['body'];
+$ftdbody = verify_body($body);
 ?>
 
 <!DOCTYPE html>
@@ -156,10 +147,10 @@ include("includes/functions.php");
     <script src="js/sweetalert2.all.min.js"></script>
     <script src="js/script.js"></script>
     <script>
-      ftdnum = "<?=$ftdnum?>";
-      num = "<?=$num?>";
-      ftdbody = "<?=$ftdbody?>";
-      text = "<?=$body?>";
+      formatedNumber = "<?=$ftdnum?>";
+      formatedMessage = "<?=$ftdbody?>";
+      contact = "<?=$num?>";
+      message = "<?=$body?>";
     </script>
   </body>
 </html>
