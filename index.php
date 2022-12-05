@@ -94,6 +94,9 @@ include("includes/functions.php");
               $registros = $query->fetchAll(PDO::FETCH_ASSOC);
 
               foreach($registros as $option){
+                if($option['feedbackMessage'] == null){
+                  continue;
+                }
             ?>
             <option value="<?=$option['feedbackMessage']?>"><?=$option['name']?></option>
             <?php
