@@ -151,7 +151,7 @@ include("includes/functions.php");
       />
             </div>
     </main>
-    <script src="js/jquery-3.6.1.min.js"></script>
+    <script src="js/jquery-3.6.1.js"></script>
     <script src="js/sweetalert2.all.min.js"></script>
     <script src="js/script.js"></script>
     <script>
