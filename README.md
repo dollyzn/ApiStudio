@@ -1,12 +1,5 @@
 # ApiStudio
 
-Este repositório foi feito com base no código do sistema de WhatsApp CRM multi user [Whaticket](http://github.com/dollyzn/whaticket-cero), podendo utilizar-se dos releases disponíveis ou editar o código e personalizá-lo como preferir.
-
-Caso possua alguma sugestão de melhoria, fique a vontade para criar um pull request!
-
-----
-
-
 This repository was made based on the code of the WhatsApp CRM multi user system [Whaticket](http://github.com/dollyzn/whaticket-cero), being able to use the available releases or edit the code and customize it as to prefer.
 
 If you have any suggestions for improvement, feel free to create a pull request!
