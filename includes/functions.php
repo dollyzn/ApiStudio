@@ -17,6 +17,8 @@ function verify_number($num) {
       $num = str_replace("(", "", $num);
       $num = str_replace(")", "", $num);
       $num = str_replace("-", "", $num);
+      $num = str_replace(" ", "", $num);
+
 
       return $num;
       } else {
