@@ -406,7 +406,6 @@ $(document).on({
       allowOutsideClick: false,
       didOpen: () => {
         Swal.showLoading();
-        const b = Swal.getHtmlContainer().querySelector("b");
       },
     });
   },
