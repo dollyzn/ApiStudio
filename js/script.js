@@ -137,8 +137,11 @@ function sendMessage(type) {
                           title: "Ok!!",
                           text: "O código e senha foi enviado sucesso!",
                           icon: "success",
-                          confirmButtonColor: "#2e9e60",
-                          confirmButtonText: "OK",
+                          timer: 3000,
+                          timerProgressBar: true,
+                          didOpen: () => {
+                            Swal.showLoading();
+                          },
                           showClass: {
                             popup: "animate__animated animate__fadeInDown",
                           },
@@ -147,8 +150,8 @@ function sendMessage(type) {
                           },
                           allowOutsideClick: false,
                         }).then((result) => {
-                          if (result.isConfirmed) {
-                            closeAll();
+                          if (result.dismiss === Swal.DismissReason.timer) {
+                            hideAll();
                           }
                         });
                       }
@@ -239,8 +242,11 @@ function sendMessage(type) {
                       title: "Ok!",
                       text: "Todas as mensagens foram enviadas com sucesso!",
                       icon: "success",
-                      confirmButtonColor: "#2e9e60",
-                      confirmButtonText: "OK",
+                      timer: 3000,
+                      timerProgressBar: true,
+                      didOpen: () => {
+                        Swal.showLoading();
+                      },
                       showClass: {
                         popup: "animate__animated animate__fadeInDown",
                       },
@@ -249,8 +255,8 @@ function sendMessage(type) {
                       },
                       allowOutsideClick: false,
                     }).then((result) => {
-                      if (result.isConfirmed) {
-                        closeAll();
+                      if (result.dismiss === Swal.DismissReason.timer) {
+                        hideAll();
                       }
                     });
                   }
@@ -291,8 +297,11 @@ function sendMessage(type) {
                   title: "Mensagem enviada com sucesso!",
                   text: "Todas as mensagens foram enviadas com sucesso!",
                   icon: "success",
-                  confirmButtonColor: "#2e9e60",
-                  confirmButtonText: "OK",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  didOpen: () => {
+                    Swal.showLoading();
+                  },
                   showClass: {
                     popup: "animate__animated animate__fadeInDown",
                   },
@@ -301,8 +310,8 @@ function sendMessage(type) {
                   },
                   allowOutsideClick: false,
                 }).then((result) => {
-                  if (result.isConfirmed) {
-                    closeAll();
+                  if (result.dismiss === Swal.DismissReason.timer) {
+                    hideAll();
                   }
                 });
                 break;
@@ -371,7 +380,7 @@ function setAttendantSelectVisible() {
   document.getElementById("container3").style = "display: block";
 }
 
-function closeAll() {
+function hideAll() {
   sessionStorage.clear();
   document.querySelector("title").innerText = "Finalizado";
   document.getElementById("container1").style = "display: none";
