@@ -137,11 +137,8 @@ function sendMessage(type) {
                           title: "Ok!!",
                           text: "O código e senha foi enviado sucesso!",
                           icon: "success",
-                          timer: 3000,
+                          timer: 5000,
                           timerProgressBar: true,
-                          didOpen: () => {
-                            Swal.showLoading();
-                          },
                           showClass: {
                             popup: "animate__animated animate__fadeInDown",
                           },
@@ -242,11 +239,8 @@ function sendMessage(type) {
                       title: "Ok!",
                       text: "Todas as mensagens foram enviadas com sucesso!",
                       icon: "success",
-                      timer: 3000,
+                      timer: 5000,
                       timerProgressBar: true,
-                      didOpen: () => {
-                        Swal.showLoading();
-                      },
                       showClass: {
                         popup: "animate__animated animate__fadeInDown",
                       },
@@ -297,11 +291,8 @@ function sendMessage(type) {
                   title: "Mensagem enviada com sucesso!",
                   text: "Todas as mensagens foram enviadas com sucesso!",
                   icon: "success",
-                  timer: 3000,
+                  timer: 5000,
                   timerProgressBar: true,
-                  didOpen: () => {
-                    Swal.showLoading();
-                  },
                   showClass: {
                     popup: "animate__animated animate__fadeInDown",
                   },
@@ -388,7 +379,7 @@ function hideAll() {
   document.getElementById("container3").style = "display: none";
 
   document.querySelector(".header").style =
-    "animation: end 8s 1s forwards, end2 5s 10s forwards;";
+    "animation: end 5s 1s forwards, end2 5s 6s forwards;";
 }
 
 window.onload = function showNumber() {
