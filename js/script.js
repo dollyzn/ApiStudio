@@ -139,6 +139,7 @@ function sendMessage(type) {
                           icon: "success",
                           timer: 5000,
                           timerProgressBar: true,
+                          showConfirmButton: false,
                           showClass: {
                             popup: "animate__animated animate__fadeInDown",
                           },
@@ -241,6 +242,7 @@ function sendMessage(type) {
                       icon: "success",
                       timer: 5000,
                       timerProgressBar: true,
+                      showConfirmButton: false,
                       showClass: {
                         popup: "animate__animated animate__fadeInDown",
                       },
@@ -293,6 +295,7 @@ function sendMessage(type) {
                   icon: "success",
                   timer: 5000,
                   timerProgressBar: true,
+                  showConfirmButton: false,
                   showClass: {
                     popup: "animate__animated animate__fadeInDown",
                   },
