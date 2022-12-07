@@ -29,7 +29,7 @@ function verify_number($num) {
 
 function masc_tel($num) {
 
- if(isset($num)){           
+ if($num != "Número não definido"){           
     $tam = strlen(preg_replace("/[^0-9]/", "", $num));
       if ($tam == 13) {
             return "+".substr($num,0,$tam-11)." (".substr($num,$tam-11,2).") ".substr($num,$tam-9,5)."-".substr($num,-4);
