@@ -26,7 +26,7 @@ curl_setopt_array($curl, [
   CURLOPT_CUSTOMREQUEST => "POST",
   CURLOPT_POSTFIELDS => $json,
   CURLOPT_HTTPHEADER => [
-    "Authorization: Bearer 8e650eaf-43c9-45cc-bdf1-1b90609a7620",
+    "Authorization: Bearer /*WhaticketApiToken*/",
     "Content-Type: application/json"
   ],
 ]);
