@@ -1,33 +1,99 @@
-function changeWhatsapp(type) {
-  var name = sessionStorage.getItem("name");
-  var id = sessionStorage.getItem("whatsappId");
+window.onload = function showNumber() {
+  sessionStorage.clear();
+  populate_Storage();
 
+  $("#ftdnum").text(formatedNumber);
+  $(".body").text(formatedMessage);
+};
+
+function populate_Storage(name, id, body) {
+  if (name) {
+    sessionStorage.setItem("name", name);
+    if (id) {
+      sessionStorage.setItem("whatsappId", id);
+    }
+    if (body) {
+      sessionStorage.setItem("body", body);
+    }
+    return;
+  }
+
+  try {
+    sessionStorage.setItem("formatedBody", formatedMessage);
+    sessionStorage.setItem("formatedNum", formatedNumber);
+    sessionStorage.setItem("body", message);
+    sessionStorage.setItem("number", contact);
+
+    if (!$.isNumeric(sessionStorage.getItem("number"))) {
+      throw "error";
+    }
+  } catch {
+    Swal.fire({
+      title: "Ocorreu um erro!",
+      text: "Verifique o número do paciente.",
+      confirmButtonColor: "#C90056",
+      icon: "error",
+      showClass: {
+        popup: "animate__animated animate__fadeInDown",
+      },
+      hideClass: {
+        popup: "animate__animated animate__fadeOutUp",
+      },
+    });
+  }
+}
+
+$("#whatsapp").change(function () {
+  var name = $("#whatsapp").find(":selected").text();
+  var id = $("#whatsapp").find(":selected").val();
+
+  populate_Storage(name, id);
+  changeWhatsapp(1, name);
+});
+
+$("#whatsapp2").change(function () {
+  var name = $("#whatsapp2").find(":selected").text();
+  var feedbackMessage = $("#whatsapp2").find(":selected").val();
+
+  populate_Storage(name, undefined, feedbackMessage);
+  changeWhatsapp(2, name);
+});
+
+$("#whatsapp3").change(function () {
+  var name = $("#whatsapp3").find(":selected").text();
+  var attendantMessage = $("#whatsapp3").find(":selected").val();
+
+  populate_Storage(name, undefined, attendantMessage);
+  changeWhatsapp(3, name);
+});
+
+function changeWhatsapp(type, name) {
   switch (type) {
     case 1:
       if (name === "Selecione") {
-        document.getElementById("name").innerText = "Não definido";
-        document.getElementById("name").style = "color: red";
+        $("#name").text("Não definido");
+        $("#name").css("color", "red");
       } else {
-        document.getElementById("name").innerText = name;
-        document.getElementById("name").style = "color: black";
+        $("#name").text(name);
+        $("#name").css("color", "black");
       }
       break;
     case 2:
       if (name === "Selecione") {
-        document.getElementById("name2").innerText = "Não definido";
-        document.getElementById("name2").style = "color: red";
+        $("#name2").text("Não definido");
+        $("#name2").css("color", "red");
       } else {
-        document.getElementById("name2").innerText = name;
-        document.getElementById("name2").style = "color: black";
+        $("#name2").text(name);
+        $("#name2").css("color", "black");
       }
       break;
     case 3:
       if (name === "Selecione") {
-        document.getElementById("name3").innerText = "Não definido";
-        document.getElementById("name3").style = "color: red";
+        $("#name3").text("Não definido");
+        $("#name3").css("color", "red");
       } else {
-        document.getElementById("name3").innerText = name;
-        document.getElementById("name3").style = "color: black";
+        $("#name3").text(name);
+        $("#name3").css("color", "black");
       }
       break;
   }
@@ -46,33 +112,6 @@ $("#whatsappSelect2").submit(function (e) {
 $("#whatsappSelect3").submit(function (e) {
   e.preventDefault();
   sendMessage(3);
-});
-
-$("#whatsapp").change(function () {
-  var name = $("#whatsapp").find(":selected").text();
-  var id = $("#whatsapp").find(":selected").val();
-
-  sessionStorage.setItem("name", name);
-  sessionStorage.setItem("whatsappId", id);
-  changeWhatsapp(1);
-});
-
-$("#whatsapp2").change(function () {
-  var name = $("#whatsapp2").find(":selected").text();
-  var feedbackMessage = $("#whatsapp2").find(":selected").val();
-
-  sessionStorage.setItem("name", name);
-  sessionStorage.setItem("body", feedbackMessage);
-  changeWhatsapp(2);
-});
-
-$("#whatsapp3").change(function () {
-  var name = $("#whatsapp3").find(":selected").text();
-  var attendantMessage = $("#whatsapp3").find(":selected").val();
-
-  sessionStorage.setItem("name", name);
-  sessionStorage.setItem("body", attendantMessage);
-  changeWhatsapp(3);
 });
 
 function sendMessage(type) {
@@ -332,69 +371,6 @@ function sendMessage(type) {
   }
 }
 
-function populate_Storage() {
-  sessionStorage.clear();
-
-  try {
-    sessionStorage.setItem("formatedBody", formatedMessage);
-    sessionStorage.setItem("formatedNum", formatedNumber);
-    sessionStorage.setItem("body", message);
-    sessionStorage.setItem("number", contact);
-
-    if (!$.isNumeric(sessionStorage.getItem("number"))) {
-      throw "error";
-    }
-  } catch {
-    Swal.fire({
-      title: "Ocorreu um erro!",
-      text: "Verifique o número do paciente.",
-      confirmButtonColor: "#C90056",
-      icon: "error",
-      showClass: {
-        popup: "animate__animated animate__fadeInDown",
-      },
-      hideClass: {
-        popup: "animate__animated animate__fadeOutUp",
-      },
-    });
-  }
-}
-
-function setFeedbackSelectVisible() {
-  document.querySelector("title").innerText = "Enviar Feedback";
-  document.getElementById("container1").style = "display: none";
-  document.getElementById("container2").style = "display: block";
-  document.getElementById("container3").style = "display: none";
-}
-
-function setAttendantSelectVisible() {
-  document.querySelector("title").innerText = "Enviar Nome do Atendente";
-  document.getElementById("container1").style = "display: none";
-  document.getElementById("container2").style = "display: none";
-  document.getElementById("container3").style = "display: block";
-}
-
-function hideAll() {
-  sessionStorage.clear();
-  document.querySelector("title").innerText = "Finalizado";
-  document.getElementById("container1").style = "display: none";
-  document.getElementById("container2").style = "display: none";
-  document.getElementById("container3").style = "display: none";
-
-  document.querySelector(".header").style =
-    "animation: end 5s 1s forwards, end2 5s 6s forwards;";
-}
-
-window.onload = function showNumber() {
-  populate_Storage();
-
-  document.getElementById("ftdnum").innerText =
-    sessionStorage.getItem("formatedNum");
-
-  document.querySelector(".body").innerText =
-    sessionStorage.getItem("formatedBody");
-};
-
 $(document).on({
   ajaxStart: function () {
     Swal.fire({
@@ -413,3 +389,30 @@ $(document).on({
     });
   },
 });
+
+function setFeedbackSelectVisible() {
+  $("title").text("Enviar Feedback");
+  $(".body").text("");
+  $("#container1").css("display", "none");
+  $("#container2").css("display", "block");
+  $("#container3").css("display", "none");
+}
+
+function setAttendantSelectVisible() {
+  $("title").text("Enviar Nome do Atendente");
+  $(".body").text("");
+  $("#container1").css("display", "none");
+  $("#container2").css("display", "none");
+  $("#container3").css("display", "block");
+}
+
+function hideAll() {
+  sessionStorage.clear();
+  $("title").text("Finalizado");
+  $("#container1").css("display", "none");
+  $("#container2").css("display", "none");
+  $("#container3").css("display", "none");
+
+  document.querySelector(".header").style =
+    "animation: end 5s 1s forwards, end2 5s 6s forwards;";
+}

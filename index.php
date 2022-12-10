@@ -4,9 +4,9 @@ include("includes/functions.php");
 ?>
 
 <?php
-$num = verify_number($_GET['number']);
+$num = verify_number($_GET['number'] ?? "Número não definido");
 $ftdnum = masc_tel($num);
-$body = $_GET['body'];
+$body = $_GET['body'] ?? "Mensagem não definida";
 $ftdbody = verify_body($body);
 ?>
 
