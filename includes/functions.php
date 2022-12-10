@@ -12,7 +12,7 @@ function verify_body($body) {
 
 function verify_number($num) {
 
-      if(isset($num) || $num != "Número não definido") {
+      if(isset($num) && $num != "Número não definido") {
 
       $num = str_replace("(", "", $num);
       $num = str_replace(")", "", $num);

@@ -7,8 +7,10 @@ window.onload = function showNumber() {
 };
 
 function populate_Storage(name, id, body) {
-  if (name) {
-    sessionStorage.setItem("name", name);
+  if (name || id || body) {
+    if (name) {
+      sessionStorage.setItem("name", name);
+    }
     if (id) {
       sessionStorage.setItem("whatsappId", id);
     }
