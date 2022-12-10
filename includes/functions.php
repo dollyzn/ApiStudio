@@ -2,7 +2,7 @@
 
 function verify_body($body) {
 
-      if(isset($body)) {
+      if(isset($body) && $body != "Mensagem não definida") {
         $body = str_replace("[[[", " ", $body);
         return str_replace("*", "", $body);
       } else {
@@ -12,7 +12,7 @@ function verify_body($body) {
 
 function verify_number($num) {
 
-      if(isset($num)) {
+      if(isset($num) || $num != "Número não definido") {
 
       $num = str_replace("(", "", $num);
       $num = str_replace(")", "", $num);
