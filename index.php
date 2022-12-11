@@ -19,6 +19,8 @@ $ftdbody = verify_body($body);
     <link rel="stylesheet" href="assets/style.css" />
     <link rel="stylesheet" href="assets/css2.css" />
     <link rel="stylesheet" href="assets/animate.min.css" />
+    <link rel="stylesheet" href="assets/introjs.css" />
+    <link rel="stylesheet" href="assets/introjs-modern.css" />
     <link type="image/png" rel="favicon" href="assets/images/logo.ico" />
   </head>
   <body>
@@ -62,9 +64,9 @@ $ftdbody = verify_body($body);
            id="ftdnum">
           </span></b>
         </p>
-      <p class="body">
-      </div>
+      <p class="body" id="message" data-intro='Para alterar a mensagem basta clicar em cima do texto!'>
       </p>
+      </div>
        <input
         type="submit"
         form="whatsappSelect"
@@ -145,6 +147,7 @@ $ftdbody = verify_body($body);
     </main>
     <script src="js/jquery-3.6.1.js"></script>
     <script src="js/sweetalert2.all.min.js"></script>
+    <script src="js/intro.min.js"></script>
     <script src="js/script.js"></script>
     <script>
       formatedNumber = "<?=$ftdnum?>";
