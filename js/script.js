@@ -1,12 +1,23 @@
 window.onload = function showNumber() {
   sessionStorage.clear();
-  populate_Storage();
+  populateStorage();
+
+  setTimeout(function () {
+    introJs()
+      .setOptions({
+        doneLabel: "Ok!",
+        dontShowAgain: true,
+        dontShowAgainLabel: "Não mostrar novamente",
+        dontShowAgainCookieDays: "7",
+      })
+      .start();
+  }, 1000);
 
   $("#ftdnum").text(formatedNumber);
   $(".body").text(formatedMessage);
 };
 
-function populate_Storage(name, id, body) {
+function populateStorage(name, id, body) {
   if (name || id || body) {
     if (name) {
       sessionStorage.setItem("name", name);
@@ -45,11 +56,54 @@ function populate_Storage(name, id, body) {
   }
 }
 
+$("#message").click(function () {
+  if (formatedNumber != "Número não definido") {
+    Swal.fire({
+      title: "Digite a mensagem personalizada",
+      input: "textarea",
+      confirmButtonColor: "#2e9e60",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "Salvar",
+      inputPlaceholder: "Mensagem...",
+      inputLabel: "Sua mensagem aqui 👇",
+      inputValue: sessionStorage.getItem("body"),
+      showCancelButton: true,
+      inputValidator: (value) => {
+        if (!value) {
+          return "Você precisa digitar algo!";
+        } else {
+          $(".body").text(value);
+          populateStorage(undefined, undefined, value);
+        }
+      },
+      showClass: {
+        popup: "animate__animated animate__fadeInDown",
+      },
+      hideClass: {
+        popup: "animate__animated animate__fadeOutUp",
+      },
+    });
+  } else {
+    Swal.fire({
+      title: "Ocorreu um erro!",
+      text: "Verifique o número do paciente.",
+      confirmButtonColor: "#C90056",
+      icon: "error",
+      showClass: {
+        popup: "animate__animated animate__fadeInDown",
+      },
+      hideClass: {
+        popup: "animate__animated animate__fadeOutUp",
+      },
+    });
+  }
+});
+
 $("#whatsapp").change(function () {
   var name = $("#whatsapp").find(":selected").text();
   var id = $("#whatsapp").find(":selected").val();
 
-  populate_Storage(name, id);
+  populateStorage(name, id);
   changeWhatsapp(1, name);
 });
 
@@ -57,7 +111,7 @@ $("#whatsapp2").change(function () {
   var name = $("#whatsapp2").find(":selected").text();
   var feedbackMessage = $("#whatsapp2").find(":selected").val();
 
-  populate_Storage(name, undefined, feedbackMessage);
+  populateStorage(name, undefined, feedbackMessage);
   changeWhatsapp(2, name);
 });
 
@@ -65,7 +119,7 @@ $("#whatsapp3").change(function () {
   var name = $("#whatsapp3").find(":selected").text();
   var attendantMessage = $("#whatsapp3").find(":selected").val();
 
-  populate_Storage(name, undefined, attendantMessage);
+  populateStorage(name, undefined, attendantMessage);
   changeWhatsapp(3, name);
 });
 
