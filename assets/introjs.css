@@ -142,7 +142,7 @@ tr.introjs-showElement > th {
 .introjs-dontShowAgain input {
   padding: 0;
   margin: 0;
-  margin-bottom: 2px;
+  margin-bottom: 40px;
   display: inline;
   width: 12px;
   height: 12px;
@@ -160,7 +160,6 @@ tr.introjs-showElement > th {
 .introjs-tooltip-title {
   font-size: 18px;
   width: 90%;
-  min-height: 1.5em;
   margin: 0;
   padding: 0;
   font-weight: 700;

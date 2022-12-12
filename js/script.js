@@ -10,6 +10,9 @@ window.onload = function showNumber() {
         dontShowAgain: true,
         dontShowAgainLabel: "Não mostrar novamente",
         dontShowAgainCookieDays: "7",
+        showBullets: false,
+        disableInteraction: true,
+        showButtons: false,
       })
       .start();
   }, 1000);
