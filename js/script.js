@@ -3,6 +3,7 @@ window.onload = function showNumber() {
   populateStorage();
 
   setTimeout(function () {
+    Swal.close();
     introJs()
       .setOptions({
         doneLabel: "Ok!",

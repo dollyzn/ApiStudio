@@ -21,7 +21,7 @@ $ftdbody = verify_body($body);
     <link rel="stylesheet" href="assets/animate.min.css" />
     <link rel="stylesheet" href="assets/introjs.css" />
     <link rel="stylesheet" href="assets/introjs-modern.css" />
-    <link type="image/png" rel="favicon" href="assets/images/logo.ico" />
+    <link rel="icon" type="images/x-icon" href="assets/images/favicon.ico" />
   </head>
   <body>
     <main>
