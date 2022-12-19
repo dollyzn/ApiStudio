@@ -474,5 +474,5 @@ function hideAll() {
   $("#container3").css("display", "none");
 
   document.querySelector(".header").style =
-    "animation: end 5s 1s forwards, end2 5s 6s forwards;";
+    "animation: end 5s 1s forwards";
 }
