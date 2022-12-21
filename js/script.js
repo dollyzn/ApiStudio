@@ -1,3 +1,6 @@
+const animationSwalShowClass = "animate__animated animate__zoomIn";
+const animationSwalHideClass = "animate__animated animate__zoomOut";
+
 window.onload = function showNumber() {
   sessionStorage.clear();
   populateStorage();
@@ -51,10 +54,10 @@ function populateStorage(name, id, body) {
       confirmButtonColor: "#C90056",
       icon: "error",
       showClass: {
-        popup: "animate__animated animate__fadeInDown",
+        popup: animationSwalShowClass,
       },
       hideClass: {
-        popup: "animate__animated animate__fadeOutUp",
+        popup: animationSwalHideClass,
       },
     });
   }
@@ -81,10 +84,10 @@ $("#message").click(function () {
         }
       },
       showClass: {
-        popup: "animate__animated animate__fadeInDown",
+        popup: animationSwalShowClass,
       },
       hideClass: {
-        popup: "animate__animated animate__fadeOutUp",
+        popup: animationSwalHideClass,
       },
     });
   } else {
@@ -94,10 +97,10 @@ $("#message").click(function () {
       confirmButtonColor: "#C90056",
       icon: "error",
       showClass: {
-        popup: "animate__animated animate__fadeInDown",
+        popup: animationSwalShowClass,
       },
       hideClass: {
-        popup: "animate__animated animate__fadeOutUp",
+        popup: animationSwalHideClass,
       },
     });
   }
@@ -200,10 +203,10 @@ function sendMessage(type) {
                   confirmButtonText: "Sim!",
                   denyButtonText: "Não",
                   showClass: {
-                    popup: "animate__animated animate__fadeInDown",
+                    popup: animationSwalShowClass,
                   },
                   hideClass: {
-                    popup: "animate__animated animate__fadeOutUp",
+                    popup: animationSwalHideClass,
                   },
                   allowOutsideClick: false,
                 }).then((result) => {
@@ -221,10 +224,10 @@ function sendMessage(type) {
                       confirmButtonText: "Sim!",
                       denyButtonText: "Não",
                       showClass: {
-                        popup: "animate__animated animate__fadeInDown",
+                        popup: animationSwalShowClass,
                       },
                       hideClass: {
-                        popup: "animate__animated animate__fadeOutUp",
+                        popup: animationSwalHideClass,
                       },
                       allowOutsideClick: false,
                     }).then((result) => {
@@ -240,10 +243,10 @@ function sendMessage(type) {
                           timerProgressBar: true,
                           showConfirmButton: false,
                           showClass: {
-                            popup: "animate__animated animate__fadeInDown",
+                            popup: animationSwalShowClass,
                           },
                           hideClass: {
-                            popup: "animate__animated animate__fadeOutUp",
+                            popup: animationSwalHideClass,
                           },
                           allowOutsideClick: false,
                         }).then((result) => {
@@ -263,10 +266,10 @@ function sendMessage(type) {
                   confirmButtonColor: "#C90056",
                   icon: "error",
                   showClass: {
-                    popup: "animate__animated animate__fadeInDown",
+                    popup: animationSwalShowClass,
                   },
                   hideClass: {
-                    popup: "animate__animated animate__fadeOutUp",
+                    popup: animationSwalHideClass,
                   },
                 });
                 break;
@@ -277,10 +280,10 @@ function sendMessage(type) {
                   confirmButtonColor: "#C90056",
                   icon: "error",
                   showClass: {
-                    popup: "animate__animated animate__fadeInDown",
+                    popup: animationSwalShowClass,
                   },
                   hideClass: {
-                    popup: "animate__animated animate__fadeOutUp",
+                    popup: animationSwalHideClass,
                   },
                 });
                 break;
@@ -294,10 +297,10 @@ function sendMessage(type) {
               confirmButtonColor: "#C90056",
               icon: "error",
               showClass: {
-                popup: "animate__animated animate__fadeInDown",
+                popup: animationSwalShowClass,
               },
               hideClass: {
-                popup: "animate__animated animate__fadeOutUp",
+                popup: animationSwalHideClass,
               },
             });
           }
@@ -325,10 +328,10 @@ function sendMessage(type) {
                   confirmButtonText: "Sim!",
                   denyButtonText: "Não",
                   showClass: {
-                    popup: "animate__animated animate__fadeInDown",
+                    popup: animationSwalShowClass,
                   },
                   hideClass: {
-                    popup: "animate__animated animate__fadeOutUp",
+                    popup: animationSwalHideClass,
                   },
                   allowOutsideClick: false,
                 }).then((result) => {
@@ -343,10 +346,10 @@ function sendMessage(type) {
                       timerProgressBar: true,
                       showConfirmButton: false,
                       showClass: {
-                        popup: "animate__animated animate__fadeInDown",
+                        popup: animationSwalShowClass,
                       },
                       hideClass: {
-                        popup: "animate__animated animate__fadeOutUp",
+                        popup: animationSwalHideClass,
                       },
                       allowOutsideClick: false,
                     }).then((result) => {
@@ -367,10 +370,10 @@ function sendMessage(type) {
               confirmButtonColor: "#C90056",
               icon: "error",
               showClass: {
-                popup: "animate__animated animate__fadeInDown",
+                popup: animationSwalShowClass,
               },
               hideClass: {
-                popup: "animate__animated animate__fadeOutUp",
+                popup: animationSwalHideClass,
               },
             });
           }
@@ -396,10 +399,10 @@ function sendMessage(type) {
                   timerProgressBar: true,
                   showConfirmButton: false,
                   showClass: {
-                    popup: "animate__animated animate__fadeInDown",
+                    popup: animationSwalShowClass,
                   },
                   hideClass: {
-                    popup: "animate__animated animate__fadeOutUp",
+                    popup: animationSwalHideClass,
                   },
                   allowOutsideClick: false,
                 }).then((result) => {
@@ -418,10 +421,10 @@ function sendMessage(type) {
               confirmButtonColor: "#C90056",
               icon: "error",
               showClass: {
-                popup: "animate__animated animate__fadeInDown",
+                popup: animationSwalShowClass,
               },
               hideClass: {
-                popup: "animate__animated animate__fadeOutUp",
+                popup: animationSwalHideClass,
               },
             });
           }
@@ -437,10 +440,10 @@ $(document).on({
       title: "Processando...",
       text: "Por favor, aguarde!",
       showClass: {
-        popup: "animate__animated animate__fadeInDown",
+        popup: animationSwalShowClass,
       },
       hideClass: {
-        popup: "animate__animated animate__fadeOutUp",
+        popup: animationSwalHideClass,
       },
       allowOutsideClick: false,
       didOpen: () => {
@@ -473,6 +476,5 @@ function hideAll() {
   $("#container2").css("display", "none");
   $("#container3").css("display", "none");
 
-  document.querySelector(".header").style =
-    "animation: end 5s 1s forwards";
+  document.querySelector(".header").style = "animation: end 5s 1s forwards";
 }
