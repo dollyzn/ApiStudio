@@ -5,24 +5,41 @@ window.onload = function showNumber() {
   sessionStorage.clear();
   populateStorage();
 
-  setTimeout(function () {
-    Swal.close();
-    introJs()
-      .setOptions({
-        doneLabel: "Ok!",
-        dontShowAgain: true,
-        dontShowAgainLabel: "Não mostrar novamente",
-        dontShowAgainCookieDays: "7",
-        showBullets: false,
-        disableInteraction: true,
-        showButtons: false,
-      })
-      .start();
-  }, 1000);
+  if (!getCookie("introjs-dontShowAgain")) {
+    setTimeout(function () {
+      Swal.close();
+      introJs()
+        .setOptions({
+          doneLabel: "Ok!",
+          dontShowAgain: true,
+          dontShowAgainLabel: "Não mostrar novamente",
+          dontShowAgainCookieDays: "7",
+          showBullets: false,
+          disableInteraction: true,
+          showButtons: false,
+        })
+        .start();
+    }, 1000);
+  }
 
   $("#ftdnum").text(formatedNumber);
   $(".body").text(formatedMessage);
 };
+
+function getCookie(k) {
+  var cookies = " " + document.cookie;
+  var key = " " + k + "=";
+  var start = cookies.indexOf(key);
+
+  if (start === -1) return null;
+
+  var pos = start + key.length;
+  var last = cookies.indexOf(";", pos);
+
+  if (last !== -1) return cookies.substring(pos, last);
+
+  return cookies.substring(pos);
+}
 
 function populateStorage(name, id, body) {
   if (name || id || body) {
