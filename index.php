@@ -4,7 +4,7 @@ include("includes/functions.php");
 ?>
 
 <?php
-$num = verify_number($_GET['number'] ?? "Número não definido");
+$num = verify_number($_GET['number'] ?? "Não definido");
 $ftdnum = masc_tel($num);
 $body = $_GET['body'] ?? "Mensagem não definida";
 $ftdbody = verify_body($body);
@@ -49,24 +49,24 @@ $ftdbody = verify_body($body);
       </div>
       <div class="info">
         <p class="whatsapp">
-          WhatsApp:
+          <img src="assets/images/icon.png" width="40px">
+          De:
            <b><span 
            id="name"  
-           class="name" 
-           style="color: red"
+           class="name"
            > 
           Não definido 
           </span></b>
         </p>
-        <p>
-          Número:
-           <b><span i
+        <p class="patient">
+        <img src="assets/images/zapicon.png" width="40px">
+        Para:
+           <b><span
            id="ftdnum">
           </span></b>
         </p>
-      <p class="body" id="message" data-intro='Para alterar a mensagem basta clicar em cima do texto!'>
-      </p>
       </div>
+      <div class="message" id="message" contenteditable="true" data-placeholder="" data-intro='Para alterar a mensagem basta clicar em cima do texto!'></div>
        <input
         type="submit"
         form="whatsappSelect"
