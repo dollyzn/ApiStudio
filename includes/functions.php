@@ -12,7 +12,7 @@ function verify_body($body) {
 
 function verify_number($num) {
 
-      if(isset($num) && $num != "Número não definido") {
+      if(isset($num) && $num != "Não definido") {
 
       $num = str_replace("(", "", $num);
       $num = str_replace(")", "", $num);
@@ -23,13 +23,13 @@ function verify_number($num) {
       return $num;
       } else {
       
-      return "Número não definido";
+      return "Não definido";
       }
 }
 
 function masc_tel($num) {
 
- if($num != "Número não definido"){           
+ if($num != "Não definido"){           
     $tam = strlen(preg_replace("/[^0-9]/", "", $num));
       if ($tam == 13) {
             return "+".substr($num,0,$tam-11)." (".substr($num,$tam-11,2).") ".substr($num,$tam-9,5)."-".substr($num,-4);
@@ -43,6 +43,6 @@ function masc_tel($num) {
             return substr($num,0,$tam-4)."-".substr($num,-4);
       }
     } else {
-            return "Número não definido";
+            return "Não definido";
     }
 }

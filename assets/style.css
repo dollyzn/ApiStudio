@@ -6,6 +6,7 @@ body {
   font-family: "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
   margin: 0;
+  background-color: #f0f2f5;
 }
 
 .header {
@@ -40,8 +41,32 @@ body {
 }
 
 .info {
-  text-align: center;
+  /* text-align: center; */
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   font-size: 15pt;
+
+  animation: fadeInLeft;
+  animation-duration: 2s;
+}
+
+.info img {
+  border-radius: 3em;
+  vertical-align: middle;
+}
+
+.whatsapp {
+  border: 2px solid #cd1330;
+  border-radius: 3em;
+  padding-right: 10px;
+}
+
+.patient {
+  border: 2px solid #1bd741;
+  border-radius: 3em;
+  padding-right: 10px;
 }
 
 .body {
@@ -54,6 +79,22 @@ body {
   margin-bottom: 20px;
   border-bottom: 1px solid black;
   max-width: 700px;
+}
+
+#message {
+  border-radius: 10px;
+  font-size: 12pt;
+  background-color: #ffffff;
+  text-align: left;
+  padding: 15px;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  max-width: 700px;
+}
+
+#message:empty:before {
+  content: attr(data-placeholder);
+  color: gray;
 }
 
 #container2 {

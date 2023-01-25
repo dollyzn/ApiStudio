@@ -23,7 +23,11 @@ window.onload = function showNumber() {
   }
 
   $("#ftdnum").text(formatedNumber);
-  $(".body").text(formatedMessage);
+  if (formatedMessage === "Mensagem não definida") {
+    $("#message").attr("data-placeholder", formatedMessage);
+  } else {
+    $("#message").text(formatedMessage);
+  }
 };
 
 function getCookie(k) {
