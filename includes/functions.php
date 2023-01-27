@@ -3,8 +3,8 @@
 function verify_body($body) {
 
       if(isset($body) && $body != "Mensagem não definida") {
-        $body = str_replace("[[[", " ", $body);
-        return str_replace("*", "", $body);
+        $body = str_replace(array("\r\n", "\n", "\r", "[[["), 'brkln', $body);
+        return $body;
       } else {
         return "Mensagem não definida";
       }

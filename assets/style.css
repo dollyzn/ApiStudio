@@ -1,9 +1,9 @@
 * {
   box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
 }
 
 body {
-  font-family: "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
   margin: 0;
   background-color: #f0f2f5;
@@ -37,7 +37,7 @@ body {
   font-family: "Roboto", sans-serif;
   padding: 13px 20px 13px 12px;
   border-radius: 10px;
-  margin-bottom: 5px;
+  margin-bottom: 20px;
 }
 
 .info {
@@ -48,53 +48,94 @@ body {
   align-items: center;
   font-size: 15pt;
 
-  animation: fadeInLeft;
-  animation-duration: 2s;
+  animation: flipInX;
+  animation-duration: 1s;
 }
 
-.info img {
+.info span {
+  font-weight: bold;
+}
+
+#rotate {
   border-radius: 3em;
   vertical-align: middle;
+  margin-left: -1px;
+  animation: rotate;
+  animation-duration: 3s;
+}
+
+#arrow {
+  animation: shakeArrow 1s linear infinite;
 }
 
 .whatsapp {
   border: 2px solid #cd1330;
   border-radius: 3em;
   padding-right: 10px;
+  margin-top: 10px;
+}
+
+.whatsapp:hover {
+  color: #ffffff;
+  background-color: #cd1330;
 }
 
 .patient {
   border: 2px solid #1bd741;
   border-radius: 3em;
   padding-right: 10px;
+  margin-top: 10px;
+}
+
+.patient:hover {
+  color: #ffffff;
+  background-color: #1bd741;
+}
+
+.feedback {
+  border: 2px solid #1a73e8;
+  border-radius: 3em;
+  padding-right: 10px;
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+
+.feedback:hover {
+  color: #ffffff;
+  background-color: #1a73e8;
+}
+
+.attendant {
+  border: 2px solid #1a73e8;
+  border-radius: 3em;
+  padding-right: 10px;
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+
+.attendant:hover {
+  color: #ffffff;
+  background-color: #1a73e8;
+}
+
+#message1 {
+  height: 90px;
 }
 
 .body {
-  font-weight: bold;
-  font-size: 15pt;
-  justify-content: center;
-  text-align: center;
   display: flex;
+  overflow: hidden;
+  height: 50px;
   margin: 0 auto;
-  margin-bottom: 20px;
-  border-bottom: 1px solid black;
-  max-width: 700px;
-}
-
-#message {
-  border-radius: 10px;
-  font-size: 12pt;
-  background-color: #ffffff;
-  text-align: left;
+  margin-top: 30px;
   padding: 15px;
-  margin: 0 auto;
-  margin-bottom: 20px;
-  max-width: 700px;
-}
-
-#message:empty:before {
-  content: attr(data-placeholder);
-  color: gray;
+  text-align: left;
+  font-size: 12pt;
+  min-width: 700px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  resize: none;
+  border: none;
 }
 
 #container2 {
@@ -107,15 +148,55 @@ body {
 
 .submit {
   align-items: center;
+  border: 5px solid #00a884;
+  background-color: transparent;
   padding: 5px;
   display: block;
   margin: 0 auto;
-  font-size: 20pt;
+  margin-top: 30px;
+  font-size: 17pt;
+  font-weight: bold;
   border-radius: 100px;
   width: 200px;
-  height: 60px;
-  color: white;
-  background-color: #128c7e;
+  height: 50px;
+  color: black;
+}
+
+.submit:hover {
+  color: #ffffff;
+  background-color: #00a884;
+}
+
+@keyframes shakeArrow {
+  0% {
+    -webkit-transform: translate3d(0, -3px, 0);
+    transform: translate3d(0, -3px, 0);
+  }
+  25% {
+    -webkit-transform: translate3d(0);
+    transform: translate3d(0);
+  }
+  50% {
+    -webkit-transform: translate3d(0, 3px, 0);
+    transform: translate3d(0, 3px, 0);
+  }
+  75% {
+    -webkit-transform: translate3d(0);
+    transform: translate3d(0);
+  }
+  100% {
+    -webkit-transform: translate3d(0, -3px, 0);
+    transform: translate3d(0, -3px, 0);
+  }
+}
+
+@keyframes rotate {
+  from {
+    rotate: 0;
+  }
+  to {
+    rotate: 360deg;
+  }
 }
 
 @keyframes end {
