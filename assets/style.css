@@ -122,6 +122,10 @@ body {
   height: 90px;
 }
 
+#message2 {
+  height: 90px;
+}
+
 .body {
   display: flex;
   overflow: hidden;
