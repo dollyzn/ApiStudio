@@ -1,10 +1,22 @@
 const animationSwalShowClass = "animate__animated animate__zoomIn";
 const animationSwalHideClass = "animate__animated animate__zoomOut";
 
-window.onload = function showNumber() {
-  sessionStorage.clear();
-  populateStorage();
+function getCookie(k) {
+  var cookies = " " + document.cookie;
+  var key = " " + k + "=";
+  var start = cookies.indexOf(key);
 
+  if (start === -1) return null;
+
+  var pos = start + key.length;
+  var last = cookies.indexOf(";", pos);
+
+  if (last !== -1) return cookies.substring(pos, last);
+
+  return cookies.substring(pos);
+}
+
+$("document").ready(function () {
   if (!getCookie("introjs-dontShowAgain")) {
     setTimeout(function () {
       Swal.close();
@@ -21,134 +33,36 @@ window.onload = function showNumber() {
         .start();
     }, 1000);
   }
-
-  $("#ftdnum").text(formatedNumber);
-  if (formatedMessage === "Mensagem não definida") {
-    $("#message").attr("data-placeholder", formatedMessage);
-  } else {
-    $("#message").text(formatedMessage);
-  }
-};
-
-function getCookie(k) {
-  var cookies = " " + document.cookie;
-  var key = " " + k + "=";
-  var start = cookies.indexOf(key);
-
-  if (start === -1) return null;
-
-  var pos = start + key.length;
-  var last = cookies.indexOf(";", pos);
-
-  if (last !== -1) return cookies.substring(pos, last);
-
-  return cookies.substring(pos);
-}
-
-function populateStorage(name, id, body) {
-  if (name || id || body) {
-    if (name) {
-      sessionStorage.setItem("name", name);
-    }
-    if (id) {
-      sessionStorage.setItem("whatsappId", id);
-    }
-    if (body) {
-      sessionStorage.setItem("body", body);
-    }
-    return;
-  }
-
-  try {
-    sessionStorage.setItem("formatedBody", formatedMessage);
-    sessionStorage.setItem("formatedNum", formatedNumber);
-    sessionStorage.setItem("body", message);
-    sessionStorage.setItem("number", contact);
-
-    if (!$.isNumeric(sessionStorage.getItem("number"))) {
-      throw "error";
-    }
-  } catch {
-    Swal.fire({
-      title: "Ocorreu um erro!",
-      text: "Verifique o número do paciente.",
-      confirmButtonColor: "#C90056",
-      icon: "error",
-      showClass: {
-        popup: animationSwalShowClass,
-      },
-      hideClass: {
-        popup: animationSwalHideClass,
-      },
-    });
-  }
-}
-
-$("#message").click(function () {
-  if (formatedNumber != "Número não definido") {
-    Swal.fire({
-      title: "Digite a mensagem personalizada",
-      input: "textarea",
-      confirmButtonColor: "#2e9e60",
-      cancelButtonText: "Cancelar",
-      confirmButtonText: "Salvar",
-      inputPlaceholder: "Mensagem...",
-      inputLabel: "Sua mensagem aqui 👇",
-      inputValue: sessionStorage.getItem("body"),
-      showCancelButton: true,
-      inputValidator: (value) => {
-        if (!value) {
-          return "Você precisa digitar algo!";
-        } else {
-          $(".body").text(value);
-          populateStorage(undefined, undefined, value);
-        }
-      },
-      showClass: {
-        popup: animationSwalShowClass,
-      },
-      hideClass: {
-        popup: animationSwalHideClass,
-      },
-    });
-  } else {
-    Swal.fire({
-      title: "Ocorreu um erro!",
-      text: "Verifique o número do paciente.",
-      confirmButtonColor: "#C90056",
-      icon: "error",
-      showClass: {
-        popup: animationSwalShowClass,
-      },
-      hideClass: {
-        popup: animationSwalHideClass,
-      },
-    });
-  }
+  $("#message1").val(message);
 });
+
+$(".body")
+  .each(function () {
+    this.setAttribute("style", "height: 100 px;");
+  })
+  .on("input", function () {
+    this.style.height = 0;
+    this.style.height = this.scrollHeight + "px";
+  });
 
 $("#whatsapp").change(function () {
   var name = $("#whatsapp").find(":selected").text();
   var id = $("#whatsapp").find(":selected").val();
 
-  populateStorage(name, id);
+  sessionStorage.setItem("whatsappId", id);
   changeWhatsapp(1, name);
 });
 
 $("#whatsapp2").change(function () {
-  var name = $("#whatsapp2").find(":selected").text();
-  var feedbackMessage = $("#whatsapp2").find(":selected").val();
+  var message = $("#whatsapp2").find(":selected").val();
 
-  populateStorage(name, undefined, feedbackMessage);
-  changeWhatsapp(2, name);
+  changeWhatsapp(2, message);
 });
 
 $("#whatsapp3").change(function () {
-  var name = $("#whatsapp3").find(":selected").text();
-  var attendantMessage = $("#whatsapp3").find(":selected").val();
+  var message = $("#whatsapp3").find(":selected").val();
 
-  populateStorage(name, undefined, attendantMessage);
-  changeWhatsapp(3, name);
+  changeWhatsapp(3, message);
 });
 
 function changeWhatsapp(type, name) {
@@ -156,28 +70,22 @@ function changeWhatsapp(type, name) {
     case 1:
       if (name === "Selecione") {
         $("#name").text("Não definido");
-        $("#name").css("color", "red");
       } else {
         $("#name").text(name);
-        $("#name").css("color", "black");
       }
       break;
     case 2:
       if (name === "Selecione") {
-        $("#name2").text("Não definido");
-        $("#name2").css("color", "red");
+        $("#message2").val("Não definido");
       } else {
-        $("#name2").text(name);
-        $("#name2").css("color", "black");
+        $("#message2").val(name);
       }
       break;
     case 3:
       if (name === "Selecione") {
-        $("#name3").text("Não definido");
-        $("#name3").css("color", "red");
+        $("#message3").val("Não definido");
       } else {
-        $("#name3").text(name);
-        $("#name3").css("color", "black");
+        $("#message3").val(name);
       }
       break;
   }
@@ -185,22 +93,25 @@ function changeWhatsapp(type, name) {
 
 $("#whatsappSelect").submit(function (e) {
   e.preventDefault();
-  sendMessage(1);
+  var message = $("#message1").val();
+  sendMessage(1, message);
 });
 
 $("#whatsappSelect2").submit(function (e) {
   e.preventDefault();
-  sendMessage(2);
+  var message = $("#message2").val();
+  sendMessage(2, message);
 });
 
 $("#whatsappSelect3").submit(function (e) {
   e.preventDefault();
-  sendMessage(3);
+  var message = $("#message3").val();
+  sendMessage(3, message);
 });
 
-function sendMessage(type) {
-  var number = sessionStorage.getItem("number");
-  var body = sessionStorage.getItem("body");
+function sendMessage(type, message) {
+  var number = contact;
+  var body = message;
   var whatsappId = sessionStorage.getItem("whatsappId");
 
   switch (type) {
@@ -216,76 +127,26 @@ function sendMessage(type) {
               case "SUCCESS":
                 Swal.fire({
                   title: "Mensagem enviada com sucesso!",
-                  text: "Enviar link para feedback?",
+                  text: `A sua mensagem foi enviada com sucesso para o número ${formatedContact}`,
                   icon: "success",
-                  showDenyButton: true,
-                  confirmButtonColor: "#2e9e60",
-                  denyButtonColor: "#C90056",
-                  confirmButtonText: "Sim!",
-                  denyButtonText: "Não",
+                  confirmButtonColor: "#00a884",
+                  confirmButtonText: "Ok",
                   showClass: {
                     popup: animationSwalShowClass,
                   },
                   hideClass: {
                     popup: animationSwalHideClass,
                   },
-                  allowOutsideClick: false,
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    sessionStorage.removeItem("body");
-                    setFeedbackSelectVisible();
-                  } else if (result.isDenied) {
-                    Swal.fire({
-                      title: "Certo!",
-                      text: "Enviar nome do atendente?",
-                      icon: "success",
-                      showDenyButton: true,
-                      confirmButtonColor: "#2e9e60",
-                      denyButtonColor: "#C90056",
-                      confirmButtonText: "Sim!",
-                      denyButtonText: "Não",
-                      showClass: {
-                        popup: animationSwalShowClass,
-                      },
-                      hideClass: {
-                        popup: animationSwalHideClass,
-                      },
-                      allowOutsideClick: false,
-                    }).then((result) => {
-                      if (result.isConfirmed) {
-                        sessionStorage.removeItem("body");
-                        setAttendantSelectVisible();
-                      } else if (result.isDenied) {
-                        Swal.fire({
-                          title: "Ok!!",
-                          text: "O código e senha foi enviado sucesso!",
-                          icon: "success",
-                          timer: 5000,
-                          timerProgressBar: true,
-                          showConfirmButton: false,
-                          showClass: {
-                            popup: animationSwalShowClass,
-                          },
-                          hideClass: {
-                            popup: animationSwalHideClass,
-                          },
-                          allowOutsideClick: false,
-                        }).then((result) => {
-                          if (result.dismiss === Swal.DismissReason.timer) {
-                            hideAll();
-                          }
-                        });
-                      }
-                    });
-                  }
+                }).then(() => {
+                  setFeedbackSelectVisible();
                 });
                 break;
               case "ERR_SENDING_WAPP_MSG":
                 Swal.fire({
                   title: "Ocorreu um erro!",
                   text: "Talvez o WhatsApp esteja desconectado.",
-                  confirmButtonColor: "#C90056",
                   icon: "error",
+                  showConfirmButton: false,
                   showClass: {
                     popup: animationSwalShowClass,
                   },
@@ -298,8 +159,8 @@ function sendMessage(type) {
                 Swal.fire({
                   title: "Ocorreu um erro!",
                   text: "Verifique o número do paciente.",
-                  confirmButtonColor: "#C90056",
                   icon: "error",
+                  showConfirmButton: false,
                   showClass: {
                     popup: animationSwalShowClass,
                   },
@@ -315,8 +176,8 @@ function sendMessage(type) {
             Swal.fire({
               title: "Ocorreu um erro!",
               text: e,
-              confirmButtonColor: "#C90056",
               icon: "error",
+              showConfirmButton: false,
               showClass: {
                 popup: animationSwalShowClass,
               },
@@ -341,44 +202,18 @@ function sendMessage(type) {
               case "SUCCESS":
                 Swal.fire({
                   title: "Mensagem enviada com sucesso!",
-                  text: "Enviar nome do atendente?",
+                  text: `A sua mensagem foi enviada com sucesso para o número ${formatedContact}`,
                   icon: "success",
-                  showDenyButton: true,
-                  confirmButtonColor: "#2e9e60",
-                  denyButtonColor: "#C90056",
-                  confirmButtonText: "Sim!",
-                  denyButtonText: "Não",
+                  confirmButtonColor: "#00a884",
+                  confirmButtonText: "Ok",
                   showClass: {
                     popup: animationSwalShowClass,
                   },
                   hideClass: {
                     popup: animationSwalHideClass,
                   },
-                  allowOutsideClick: false,
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    setAttendantSelectVisible();
-                  } else if (result.isDenied) {
-                    Swal.fire({
-                      title: "Ok!",
-                      text: "Todas as mensagens foram enviadas com sucesso!",
-                      icon: "success",
-                      timer: 5000,
-                      timerProgressBar: true,
-                      showConfirmButton: false,
-                      showClass: {
-                        popup: animationSwalShowClass,
-                      },
-                      hideClass: {
-                        popup: animationSwalHideClass,
-                      },
-                      allowOutsideClick: false,
-                    }).then((result) => {
-                      if (result.dismiss === Swal.DismissReason.timer) {
-                        hideAll();
-                      }
-                    });
-                  }
+                }).then(() => {
+                  setAttendantSelectVisible();
                 });
                 break;
               default:
@@ -388,8 +223,8 @@ function sendMessage(type) {
             Swal.fire({
               title: "Ocorreu um erro!",
               text: e,
-              confirmButtonColor: "#C90056",
               icon: "error",
+              showConfirmButton: false,
               showClass: {
                 popup: animationSwalShowClass,
               },
@@ -439,8 +274,8 @@ function sendMessage(type) {
             Swal.fire({
               title: "Ocorreu um erro!",
               text: e,
-              confirmButtonColor: "#C90056",
               icon: "error",
+              showConfirmButton: false,
               showClass: {
                 popup: animationSwalShowClass,
               },
