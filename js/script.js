@@ -125,21 +125,7 @@ function sendMessage(type, message) {
             result = JSON.parse(response);
             switch (result.error) {
               case "SUCCESS":
-                Swal.fire({
-                  title: "Mensagem enviada com sucesso!",
-                  text: `A sua mensagem foi enviada com sucesso para o número ${formatedContact}`,
-                  icon: "success",
-                  confirmButtonColor: "#00a884",
-                  confirmButtonText: "Ok",
-                  showClass: {
-                    popup: animationSwalShowClass,
-                  },
-                  hideClass: {
-                    popup: animationSwalHideClass,
-                  },
-                }).then(() => {
-                  setFeedbackSelectVisible();
-                });
+                setFeedbackSelectVisible();
                 break;
               case "ERR_SENDING_WAPP_MSG":
                 Swal.fire({
@@ -200,21 +186,7 @@ function sendMessage(type, message) {
             result = JSON.parse(response);
             switch (result.error) {
               case "SUCCESS":
-                Swal.fire({
-                  title: "Mensagem enviada com sucesso!",
-                  text: `A sua mensagem foi enviada com sucesso para o número ${formatedContact}`,
-                  icon: "success",
-                  confirmButtonColor: "#00a884",
-                  confirmButtonText: "Ok",
-                  showClass: {
-                    popup: animationSwalShowClass,
-                  },
-                  hideClass: {
-                    popup: animationSwalHideClass,
-                  },
-                }).then(() => {
-                  setAttendantSelectVisible();
-                });
+                setAttendantSelectVisible();
                 break;
               default:
                 throw result.error;
