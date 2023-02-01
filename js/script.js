@@ -125,6 +125,7 @@ function sendMessage(type, message) {
             result = JSON.parse(response);
             switch (result.error) {
               case "SUCCESS":
+                Swal.close();
                 setFeedbackSelectVisible();
                 break;
               case "ERR_SENDING_WAPP_MSG":
@@ -186,6 +187,7 @@ function sendMessage(type, message) {
             result = JSON.parse(response);
             switch (result.error) {
               case "SUCCESS":
+                Swal.close();
                 setAttendantSelectVisible();
                 break;
               default:
