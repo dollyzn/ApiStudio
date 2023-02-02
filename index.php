@@ -24,10 +24,10 @@ $message = verify_body($body);
   <body>
     <main>
       <div class="header">
-        <h1><img src="assets/images/logo.png" width="200px" /></h1>
+        <img src="assets/images/logo.png" width="200px" draggable="false" />
       </div>
       <div id="container1">
-        <div class="select">
+        <div class="select" unselectable="on" >
           <h1>Enviar por qual WhatsApp?</h1>
           <form id="whatsappSelect">
             <select id="whatsapp" required>
@@ -45,12 +45,12 @@ $message = verify_body($body);
           </form>
         </div>
         <div class="info">
-          <div class="whatsapp">
-            <img id="rotate" src="assets/images/icon.png" width="40px">
+          <div class="whatsapp" unselectable="on" >
+            <img id="rotate" src="assets/images/icon.png" width="40px" draggable="false" />
             De: <span id="name" class="name">Não definido</span>
           </div>
-          <div class="patient">
-            <img id="rotate" src="assets/images/zapicon.png" width="40px">
+          <div class="patient" unselectable="on" >
+            <img id="rotate" src="assets/images/zapicon.png" width="40px" draggable="false" />
             Para: <span><?=$contact?></span>
           </div>
         </div>
@@ -58,7 +58,7 @@ $message = verify_body($body);
          <input type="submit" form="whatsappSelect" class="submit" value="Enviar"/>
       </div>
       <div id="container2">
-        <div class="select">
+        <div class="select" unselectable="on" >
           <h1>Selecione a Unidade</h1>
           <form id="whatsappSelect2">
             <select id="whatsapp2" required>
@@ -81,16 +81,16 @@ $message = verify_body($body);
         </div>
         <div class="info">
           <div class="feedback">
-          <img id="rotate" src="assets/images/message.png" width="40px">
+          <img id="rotate" src="assets/images/message.png" width="40px" draggable="false" />
           Mensagem  
           </div> 
-          <img id="arrow" src="assets/images/downarrow.png" width="15px">
+          <img id="arrow" src="assets/images/downarrow.png" width="15px" draggable="false" />
         </div>
         <textarea class="body" id="message2" form="whatsappSelect2" required rows="2" placeholder="Não definido"></textarea>
         <input type="submit" form="whatsappSelect2" class="submit" value="Enviar"/>
       </div>
       <div id="container3">
-        <div class="select">
+        <div class="select" unselectable="on" >
           <h1>Selecione o Atendente</h1>
           <form id="whatsappSelect3">
             <select id="whatsapp3" required>
@@ -110,10 +110,10 @@ $message = verify_body($body);
         </div>
         <div class="info">
           <div class="attendant">
-          <img id="rotate" src="assets/images/message.png" width="40px">
+          <img id="rotate" src="assets/images/message.png" width="40px" draggable="false" />
           Mensagem
           </div>
-          <img id="arrow" src="assets/images/downarrow.png" width="15px">
+          <img id="arrow" src="assets/images/downarrow.png" width="15px" draggable="false" />
         </div>
         <textarea class="body" id="message3" form="whatsappSelect3" required rows="5" placeholder="Não definido"></textarea>
         <input type="submit" form="whatsappSelect3" class="submit" value="Enviar"/>
