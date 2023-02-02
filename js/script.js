@@ -33,12 +33,13 @@ $("document").ready(function () {
         .start();
     }, 1000);
   }
+  adjustHeight($("#message1"), message);
   $("#message1").val(message);
 });
 
 $(".body")
   .each(function () {
-    this.setAttribute("style", "height: 100 px;");
+    this.setAttribute("style", "height: 49 px;");
   })
   .on("input", function () {
     this.style.height = 0;
@@ -56,12 +57,14 @@ $("#whatsapp").change(function () {
 $("#whatsapp2").change(function () {
   var message = $("#whatsapp2").find(":selected").val();
 
+  adjustHeight($("#message2"), message);
   changeWhatsapp(2, message);
 });
 
 $("#whatsapp3").change(function () {
   var message = $("#whatsapp3").find(":selected").val();
 
+  adjustHeight($("#message3"), message);
   changeWhatsapp(3, message);
 });
 
@@ -108,6 +111,15 @@ $("#whatsappSelect3").submit(function (e) {
   var message = $("#message3").val();
   sendMessage(3, message);
 });
+
+function adjustHeight(element, message) {
+  var messageLines = message.split("\n");
+  var px = 30;
+
+  for (breaklines in messageLines) {
+    element.css("height", `${(px += 19)}`);
+  }
+}
 
 function sendMessage(type, message) {
   var number = contact;
