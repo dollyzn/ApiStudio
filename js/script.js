@@ -34,12 +34,14 @@ $("document").ready(function () {
     }, 1000);
   }
   adjustHeight($("#message1"), message);
-  $("#message1").val(message);
+  if (message != "Mensagem não definida") {
+    $("#message1").val(message);
+  }
 });
 
 $(".body")
   .each(function () {
-    this.setAttribute("style", "height: 49 px;");
+    this.setAttribute("style", "height: 49px;");
   })
   .on("input", function () {
     this.style.height = 0;
