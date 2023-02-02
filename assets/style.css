@@ -130,18 +130,9 @@ body {
   background-color: #1a73e8;
 }
 
-#message1 {
-  height: 90px;
-}
-
-#message2 {
-  height: 90px;
-}
-
 .body {
   display: flex;
   overflow: hidden;
-  height: 50px;
   margin: 0 auto;
   margin-top: 30px;
   padding: 15px;
