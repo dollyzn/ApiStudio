@@ -170,6 +170,20 @@ function sendMessage(type, message) {
                   },
                 });
                 break;
+              case "ERR_WAPP_NOT_INITIALIZED":
+                Swal.fire({
+                  title: "Ocorreu um erro!",
+                  text: "O Whatsapp não foi iniciado e/ou está reiniciando. Verfique o status no CeroTicket",
+                  icon: "error",
+                  showConfirmButton: false,
+                  showClass: {
+                    popup: animationSwalShowClass,
+                  },
+                  hideClass: {
+                    popup: animationSwalHideClass,
+                  },
+                });
+                break;
               default:
                 throw result.error;
             }
