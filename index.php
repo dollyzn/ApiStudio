@@ -14,8 +14,10 @@ $message = verify_body($body);
   <head>
     <meta name="viewport" content="width=device-width" />
     <title>Envio de Código e Senha</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/style.css" />
-    <link rel="stylesheet" href="assets/css2.css" />
     <link rel="stylesheet" href="assets/animate.min.css" />
     <link rel="stylesheet" href="assets/introjs.css" />
     <link rel="stylesheet" href="assets/introjs-modern.css" />
