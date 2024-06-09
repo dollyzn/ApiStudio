@@ -35,11 +35,11 @@ $message = verify_body($body);
             <select id="whatsapp" required>
              <option value="">Selecione</option>
              <?php
-               $query = $conn->query("SELECT id, name FROM Whatsapps ORDER BY id ASC");
+              $query = $conn->query("SELECT id, token, name FROM public.\"Whatsapps\" ORDER BY id ASC");
                $registros = $query->fetchAll(PDO::FETCH_ASSOC);
                foreach($registros as $option){
              ?>
-             <option value="<?=$option['id']?>"><?=$option['name']?></option>
+             <option value="<?=$option['id'] . '|' . $option['token']?>"><?=$option['name']?></option>
              <?php
                }
              ?>
@@ -66,15 +66,15 @@ $message = verify_body($body);
             <select id="whatsapp2" required>
              <option value="">Selecione</option>
              <?php
-               $query = $conn->query("SELECT id, feedbackMessage, name FROM Whatsapps ORDER BY id ASC");
+               $query = $conn->query("SELECT id, \"ratingMessage\", name FROM public.\"Whatsapps\" ORDER BY id ASC");
                $registros = $query->fetchAll(PDO::FETCH_ASSOC);
  
                foreach($registros as $option){
-                 if($option['feedbackMessage'] == null){
+                 if($option['ratingMessage'] == null){
                    continue;
                  }
              ?>
-             <option value="<?=$option['feedbackMessage']?>"><?=$option['name']?></option>
+             <option value="<?=$option['ratingMessage']?>"><?=$option['name']?></option>
              <?php
                }
              ?>
@@ -98,7 +98,7 @@ $message = verify_body($body);
             <select id="whatsapp3" required>
               <option value="">Selecione</option>
               <?php
-                $query = $conn->query("SELECT id, name FROM Users ORDER BY name ASC");
+                $query = $conn->query("SELECT id, name FROM public.\"Users\" ORDER BY name ASC");
                 $registros = $query->fetchAll(PDO::FETCH_ASSOC);
   
                 foreach($registros as $option){

@@ -1,6 +1,7 @@
 <?php
 $number = $_POST['number'];
 $body = $_POST['body'];
+$token = $_POST['token'];
 $whatsappId = $_POST['whatsappId'];
 
 $body = str_replace("[[[", "\n", $body);
@@ -26,7 +27,7 @@ curl_setopt_array($curl, [
   CURLOPT_CUSTOMREQUEST => "POST",
   CURLOPT_POSTFIELDS => $json,
   CURLOPT_HTTPHEADER => [
-    "Authorization: Bearer /*WhaticketApiToken*/",
+    "Authorization: Bearer $token",
     "Content-Type: application/json"
   ],
 ]);
