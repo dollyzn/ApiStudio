@@ -50,9 +50,11 @@ $(".body")
 
 $("#whatsapp").change(function () {
   var name = $("#whatsapp").find(":selected").text();
-  var id = $("#whatsapp").find(":selected").val();
+  var id = $("#whatsapp").find(":selected").val().split("|")[0];
+  var token = $("#whatsapp").find(":selected").val().split("|")[1];
 
   sessionStorage.setItem("whatsappId", id);
+  sessionStorage.setItem("token", token);
   changeWhatsapp(1, name);
 });
 
@@ -127,18 +129,19 @@ function sendMessage(type, message) {
   var number = contact;
   var body = message;
   var whatsappId = sessionStorage.getItem("whatsappId");
+  var token = sessionStorage.getItem("token");
 
   switch (type) {
     case 1:
       $.ajax({
         method: "POST",
         url: "includes/api.php",
-        data: { number: number, body: body, whatsappId: whatsappId },
+        data: { number: number, body: body, token, whatsappId },
         success: function (response) {
           try {
             result = JSON.parse(response);
-            switch (result.error) {
-              case "SUCCESS":
+            switch (result.mensagem) {
+              case "Mensagem enviada":
                 Swal.close();
                 setFeedbackSelectVisible();
                 break;
@@ -208,13 +211,13 @@ function sendMessage(type, message) {
       $.ajax({
         method: "POST",
         url: "includes/api.php",
-        data: { number: number, body: body, whatsappId: whatsappId },
+        data: { number: number, body: body, token, whatsappId },
         crossDomain: true,
         success: function (response) {
           try {
             result = JSON.parse(response);
-            switch (result.error) {
-              case "SUCCESS":
+            switch (result.mensagem) {
+              case "Mensagem enviada":
                 Swal.close();
                 setAttendantSelectVisible();
                 break;
@@ -242,13 +245,13 @@ function sendMessage(type, message) {
       $.ajax({
         method: "POST",
         url: "includes/api.php",
-        data: { number: number, body: body, whatsappId: whatsappId },
+        data: { number: number, body: body, token, whatsappId },
         crossDomain: true,
         success: function (response) {
           try {
             result = JSON.parse(response);
-            switch (result.error) {
-              case "SUCCESS":
+            switch (result.mensagem) {
+              case "Mensagem enviada":
                 Swal.fire({
                   title: "Mensagem enviada com sucesso!",
                   text: "Todas as mensagens foram enviadas com sucesso!",
