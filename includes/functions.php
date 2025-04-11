@@ -14,14 +14,11 @@ function verify_body($body) {
           $body = str_replace(array("\r\n", "\n", "\r", "[[["), 'brkln', $body);
   
           if ($add_info_text) {
-              $info_text = <<<EOT
-  brklnbrklnPara ter acesso ao seu exame online:brkln
-  1° Acesse o site www.ceroimagem.com.brbrkln
-  2° Clique na área "Portal do Paciente"brkln
-  3° Em seguida, vá até a aba "Exames On-line"brkln
-  4° Digite o código e a senha recebidos e clique em "Entrar"
-  EOT;
-  
+            $info_text = "brklnbrklnPara ter acesso ao seu exame online:brkln" .
+            "1° Acesse o site www.ceroimagem.com.brbrkln" .
+            "2° Clique na área \"Portal do Paciente\"brkln" .
+            "3° Em seguida, vá até a aba \"Exames On-line\"brkln" .
+            "4° Digite o código e a senha recebidos e clique em \"Entrar\"";
               $body .= $info_text;
           }
   
