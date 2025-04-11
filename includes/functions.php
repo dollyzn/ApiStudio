@@ -5,20 +5,23 @@ function verify_body($body) {
           $link_prefix = 'https://ceroimagem.com.br';
           $add_info_text = false;
   
-          // Verifica e remove o link no início, se presente
-          if (strpos($body, $link_prefix) === 0) {
-              $body = trim(substr($body, strlen($link_prefix)));
+          // Verifica e remove o link apenas se ele estiver no início
+          if (preg_match('/^https?:\/\/(www\.)?ceroimagem\.com\.br/', $body, $match)) {
+              // Remove apenas o link do início, preservando o resto
+              $body = preg_replace('/^https?:\/\/(www\.)?ceroimagem\.com\.br\s*/', '', $body);
               $add_info_text = true;
           }
   
+          // Substitui quebras de linha por marcador
           $body = str_replace(array("\r\n", "\n", "\r", "[[["), 'brkln', $body);
   
+          // Adiciona o texto informativo, se necessário
           if ($add_info_text) {
-            $info_text = "brklnbrklnPara ter acesso ao seu exame online:brkln" .
-            "1° Acesse o site www.ceroimagem.com.brbrkln" .
-            "2° Clique na área \"Portal do Paciente\"brkln" .
-            "3° Em seguida, vá até a aba \"Exames On-line\"brkln" .
-            "4° Digite o código e a senha recebidos e clique em \"Entrar\"";
+              $info_text = "brklnbrklnPara ter acesso ao seu exame online:brkln" .
+                           "1° Acesse o site www.ceroimagem.com.brbrkln" .
+                           "2° Clique na área \"Portal do Paciente\"brkln" .
+                           "3° Em seguida, vá até a aba \"Exames On-line\"brkln" .
+                           "4° Digite o código e a senha recebidos e clique em \"Entrar\"";
               $body .= $info_text;
           }
   
@@ -26,7 +29,8 @@ function verify_body($body) {
       } else {
           return "Mensagem não definida";
       }
-  }  
+  }
+   
   
 
 function verify_number($num) {
