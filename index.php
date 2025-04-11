@@ -126,7 +126,7 @@ $message = verify_body($body);
     <script src="js/intro.min.js"></script>
     <script src="js/script.js"></script>
     <script>
-      message = "<?=$message?>";
+      message = '<?=$message?>';
       message = message.replace(/brkln/gi, "\n");
       contact = "<?=$number?>";
       formatedContact = "<?=$contact?>"
