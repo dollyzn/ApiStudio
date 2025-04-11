@@ -1,14 +1,36 @@
 <?php
 
 function verify_body($body) {
-
-      if(isset($body) && $body != "Mensagem não definida") {
-        $body = str_replace(array("\r\n", "\n", "\r", "[[["), 'brkln', $body);
-        return $body;
+      if (isset($body) && $body != "Mensagem não definida") {
+          $link_prefix = 'https://ceroimagem.com.br';
+          $add_info_text = false;
+  
+          // Verifica e remove o link no início, se presente
+          if (strpos($body, $link_prefix) === 0) {
+              $body = trim(substr($body, strlen($link_prefix)));
+              $add_info_text = true;
+          }
+  
+          $body = str_replace(array("\r\n", "\n", "\r", "[[["), 'brkln', $body);
+  
+          if ($add_info_text) {
+              $info_text = <<<EOT
+  brklnbrklnPara ter acesso ao seu exame online:brkln
+  1° Acesse o site www.ceroimagem.com.brbrkln
+  2° Clique na área "Portal do Paciente"brkln
+  3° Em seguida, vá até a aba "Exames On-line"brkln
+  4° Digite o código e a senha recebidos e clique em "Entrar"
+  EOT;
+  
+              $body .= $info_text;
+          }
+  
+          return $body;
       } else {
-        return "Mensagem não definida";
+          return "Mensagem não definida";
       }
-}
+  }  
+  
 
 function verify_number($num) {
 
