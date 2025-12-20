@@ -1,56 +1,59 @@
-import { NextResponse } from "next/server"
+import { NextResponse } from "next/server";
+import axios from "axios";
+import { env } from "@/lib/env";
 
 interface ChatwootInbox {
-  id: number
-  name: string
+  id: number;
+  name: string;
+}
+
+interface N8nInboxResponse {
+  data?: ChatwootInbox[];
 }
 
 export async function GET() {
   try {
-    const chatwootUrl = process.env.CHATWOOT_URL
-    const chatwootToken = process.env.CHATWOOT_API_TOKEN
-    const accountId = process.env.CHATWOOT_ACCOUNT_ID
-
-    // If Chatwoot credentials are not provided, return mock data
-    if (!chatwootUrl || !chatwootToken || !accountId) {
-      console.log("[v0] Chatwoot credentials not configured, returning mock data")
-      return NextResponse.json([
-        { id: 1, name: "WhatsApp - Clínica Principal" },
-        { id: 2, name: "WhatsApp - Atendimento 24h" },
-        { id: 3, name: "WhatsApp - Resultados" },
-      ])
+    if (!env.N8N_WEBHOOK_URL) {
+      return NextResponse.json(
+        { error: "N8N webhook URL not configured" },
+        { status: 500 }
+      );
     }
 
-    // Fetch inboxes from Chatwoot API
-    const response = await fetch(`${chatwootUrl}/api/v1/accounts/${accountId}/inboxes`, {
-      headers: {
-        api_access_token: chatwootToken,
-        "Content-Type": "application/json",
+    const { data } = await axios.post<N8nInboxResponse>(
+      env.N8N_WEBHOOK_URL,
+      {
+        action: "getInboxes",
       },
-      cache: "no-store",
-    })
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        timeout: 10000,
+      }
+    );
 
-    if (!response.ok) {
-      throw new Error(`Chatwoot API error: ${response.status}`)
+    const rawInboxes = data.data;
+
+    if (!Array.isArray(rawInboxes)) {
+      return NextResponse.json(
+        { error: "Invalid inbox response format" },
+        { status: 502 }
+      );
     }
 
-    const data = await response.json()
-
-    // Map Chatwoot inboxes to our format
-    const inboxes: ChatwootInbox[] = data.payload.map((inbox: any) => ({
+    const inboxes: ChatwootInbox[] = rawInboxes.map((inbox) => ({
       id: inbox.id,
       name: inbox.name,
-    }))
+    }));
 
-    return NextResponse.json(inboxes)
+    return NextResponse.json(inboxes, { status: 200 });
   } catch (error) {
-    console.error("[v0] Error fetching inboxes:", error)
-
-    // Return mock data on error
-    return NextResponse.json([
-      { id: 1, name: "WhatsApp - Clínica Principal" },
-      { id: 2, name: "WhatsApp - Atendimento 24h" },
-      { id: 3, name: "WhatsApp - Resultados" },
-    ])
+    return NextResponse.json(
+      {
+        error: "Failed to fetch inboxes",
+      },
+      { status: 500 }
+    );
   }
 }
