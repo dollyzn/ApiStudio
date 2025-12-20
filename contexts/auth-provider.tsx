@@ -1,5 +1,7 @@
 "use client";
 
+import { api } from "@/lib/api";
+import { env } from "@/lib/env";
 import {
   createContext,
   useContext,
@@ -8,8 +10,6 @@ import {
   ReactNode,
 } from "react";
 import { useLocalStorage } from "usehooks-ts";
-
-const AUTH_TOKEN_KEY = "api_studio_token";
 
 interface AuthContextData {
   token: string | null;
@@ -23,7 +23,7 @@ const AuthContext = createContext<AuthContextData | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken, removeToken] = useLocalStorage<string | null>(
-    AUTH_TOKEN_KEY,
+    env.NEXT_PUBLIC_AUTH_TOKEN_KEY,
     null
   );
 
@@ -39,13 +39,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       try {
-        const res = await fetch("/api/auth/validate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ token }),
-        });
+        const res = await api.post("/api/auth/validate", { token });
 
-        if (!res.ok) throw new Error();
+        if (!res?.data?.valid) throw new Error();
 
         setIsAuthenticated(true);
       } catch {
@@ -63,13 +59,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsValidating(true);
 
     try {
-      const res = await fetch("/api/auth/validate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: tokenToValidate }),
+      const res = await api.post("/api/auth/validate", {
+        token: tokenToValidate,
       });
 
-      if (!res.ok) throw new Error();
+      if (!res?.data?.valid) throw new Error();
 
       setToken(tokenToValidate);
       setIsAuthenticated(true);
