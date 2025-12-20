@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/select";
 import { Loader2, Phone, Inbox, Key, Lock } from "lucide-react";
 import { MessageConfirmationSkeleton } from "./message-confirmation-skeleton";
+import { api } from "@/lib/api";
 
 interface MessageInbox {
   id: number;
@@ -78,9 +79,9 @@ export default function MessageConfirmationForm() {
   useEffect(() => {
     const fetchInboxes = async () => {
       try {
-        const res = await fetch("/api/inboxes");
-        if (!res.ok) throw new Error();
-        const data = await res.json();
+        const res = await api.get("/api/inboxes");
+        if (!res.data) throw new Error();
+        const data = res.data;
         setInboxes(data);
       } catch {
         toast.error("Erro ao carregar caixas de entrada");
@@ -96,20 +97,16 @@ export default function MessageConfirmationForm() {
     setSending(true);
 
     try {
-      const res = await fetch("/api/send-message", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          phone: values.phone,
-          inboxId: Number(values.inboxId),
-          codigo: values.codigo,
-          senha: values.senha,
-        }),
+      const res = await api.post("/api/send-message", {
+        phone: values.phone,
+        inboxId: Number(values.inboxId),
+        codigo: values.codigo,
+        senha: values.senha,
       });
 
-      const result = await res.json();
+      const result = await res.data;
 
-      if (!res.ok) {
+      if (!result.success) {
         throw new Error(result?.error || "Erro ao enviar mensagem");
       }
 
