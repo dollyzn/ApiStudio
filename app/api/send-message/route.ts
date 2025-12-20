@@ -41,6 +41,7 @@ export async function POST(request: NextRequest) {
       codigo: body.codigo,
       senha: body.senha,
       raw: body.raw ?? null,
+      action: "sendMessage",
     };
 
     const { data } = await axios.post(env.N8N_WEBHOOK_URL, payloadToN8n, {

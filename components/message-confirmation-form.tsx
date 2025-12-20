@@ -32,6 +32,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Loader2, Phone, Inbox, Key, Lock } from "lucide-react";
+import { MessageConfirmationSkeleton } from "./message-confirmation-skeleton";
 
 interface MessageInbox {
   id: number;
@@ -125,23 +126,18 @@ export default function MessageConfirmationForm() {
 
   return (
     <div className="max-w-3xl mx-auto">
-      <Card>
-        <CardHeader>
-          <CardTitle>Confirmação de envio de acesso ao exame</CardTitle>
-          <CardDescription>
-            Revise os dados antes de confirmar o envio
-          </CardDescription>
-        </CardHeader>
+      {loading ? (
+        <MessageConfirmationSkeleton />
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>Confirmação de envio de acesso ao exame</CardTitle>
+            <CardDescription>
+              Revise os dados antes de confirmar o envio
+            </CardDescription>
+          </CardHeader>
 
-        <CardContent>
-          {loading ? (
-            <div className="flex items-center justify-center py-12">
-              <Loader2 className="h-6 w-6 animate-spin mr-2 text-primary" />
-              <span className="text-muted-foreground">
-                Carregando caixas de entrada...
-              </span>
-            </div>
-          ) : (
+          <CardContent>
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
@@ -258,9 +254,9 @@ export default function MessageConfirmationForm() {
                 </div>
               </form>
             </Form>
-          )}
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

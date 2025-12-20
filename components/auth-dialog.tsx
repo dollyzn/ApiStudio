@@ -11,7 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useAuth } from "@/lib/hooks/useAuth";
+import { useAuth } from "@/contexts/auth-provider";
 
 export function AuthDialog() {
   const { token, validateToken, isValidating } = useAuth();

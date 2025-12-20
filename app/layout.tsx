@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import { fontMono, fontSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
+import { AuthProvider } from "@/contexts/auth-provider";
 
 export const metadata: Metadata = {
   title: "API Studio - Chatwoot Integration",
@@ -51,8 +52,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
-          <Toaster closeButton richColors />
+          <AuthProvider>
+            {children}
+            <Toaster closeButton richColors />
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>
