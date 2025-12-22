@@ -20,17 +20,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { data } = await axios.post(
-      env.N8N_WEBHOOK_URL,
-      {
-        action: "validateToken",
-        token,
+    const { data } = await axios.get(`${env.N8N_WEBHOOK_URL}/auth/validate`, {
+      headers: {
+        "x-api-key": token,
       },
-      {
-        headers: { "Content-Type": "application/json" },
-        timeout: 5000,
-      }
-    );
+    });
 
     if (!data?.valid) {
       return NextResponse.json({ valid: false }, { status: 401 });
