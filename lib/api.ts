@@ -17,7 +17,7 @@ api.interceptors.request.use(
       const token = localStorage.getItem(env.NEXT_PUBLIC_AUTH_TOKEN_KEY);
 
       if (token) {
-        config.headers.Authorization = `${token}`;
+        config.headers["Authorization"] = token;
       }
     }
 

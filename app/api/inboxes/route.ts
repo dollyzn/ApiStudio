@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const authHeader = request.headers.get("authorization");
+    const authHeader = request.headers.get("authorization")?.replace(/"/g, "");
 
     if (!authHeader) {
       return NextResponse.json(
@@ -29,15 +29,11 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const { data } = await axios.post<N8nInboxResponse>(
-      env.N8N_WEBHOOK_URL,
-      {
-        action: "getInboxes",
-      },
+    const { data } = await axios.get<N8nInboxResponse>(
+      `${env.N8N_WEBHOOK_URL}/inboxes/list`,
       {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: authHeader,
+          "x-api-key": authHeader,
         },
         timeout: 10000,
       }
