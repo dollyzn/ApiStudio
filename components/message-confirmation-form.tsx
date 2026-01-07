@@ -193,7 +193,7 @@ export default function MessageConfirmationForm() {
       const res = await api.post("/api/contacts/create", {
         phone,
         name: name.trim(),
-        inboxOriginId: Number(inboxOriginId),
+        inboxId: Number(inboxOriginId),
       });
       const data = res.data;
 
