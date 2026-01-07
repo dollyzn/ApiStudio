@@ -38,13 +38,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!/^\d+$/.test(body.phone)) {
-      return NextResponse.json(
-        { error: "Número de telefone inválido." },
-        { status: 400 }
-      );
-    }
-
     const payloadToN8n = {
       phone: body.phone,
       inboxId: body.inboxId,
