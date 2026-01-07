@@ -39,6 +39,7 @@ export async function POST(request: NextRequest) {
       {
         phone: body.phone,
         name: body.name,
+        inboxId: body.inboxId,
       },
       {
         headers: {
@@ -49,7 +50,7 @@ export async function POST(request: NextRequest) {
       }
     );
 
-    return NextResponse.json(data, { status: 200 });
+    return NextResponse.json({ success: true, data }, { status: 200 });
   } catch (error) {
     console.error("[API][CONTACTS CREATE]", error);
 
