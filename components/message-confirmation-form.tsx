@@ -54,6 +54,7 @@ import { api } from "@/lib/api";
 import { Icons } from "./ui/icons";
 import { PhoneInput } from "./ui/phone-input";
 import { parsePhoneNumber } from "react-phone-number-input";
+import { AxiosError } from "axios";
 
 interface MessageInbox {
   id: number;
@@ -243,7 +244,9 @@ export default function MessageConfirmationForm() {
       setContactId(null);
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Erro ao enviar mensagem"
+        error instanceof AxiosError
+          ? error.response?.data?.error || "Erro ao enviar mensagem"
+          : "Erro ao enviar mensagem"
       );
     } finally {
       setSending(false);
