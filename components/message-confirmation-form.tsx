@@ -55,6 +55,7 @@ import { Icons } from "./ui/icons";
 import { PhoneInput } from "./ui/phone-input";
 import { parsePhoneNumber } from "react-phone-number-input";
 import { AxiosError } from "axios";
+import Checkmark from "./ui/checkmark";
 
 interface MessageInbox {
   id: number;
@@ -82,6 +83,7 @@ export default function MessageConfirmationForm() {
   const [inboxes, setInboxes] = useState<MessageInbox[]>([]);
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
+  const [messageSent, setMessageSent] = useState(false);
   const [contactStatus, setContactStatus] =
     useState<ContactValidationStatus>("idle");
   const [contactId, setContactId] = useState<number | null>(null);
@@ -239,9 +241,7 @@ export default function MessageConfirmationForm() {
       }
 
       toast.success("Mensagem enviada com sucesso");
-      form.reset({ ...initialValues, inboxId: "" });
-      setContactStatus("idle");
-      setContactId(null);
+      setMessageSent(true);
     } catch (error) {
       toast.error(
         error instanceof AxiosError
@@ -262,6 +262,54 @@ export default function MessageConfirmationForm() {
     const phone = form.getValues("phone");
     createContact(phone, newContactName, originInboxId);
   };
+
+  const handleNewMessage = () => {
+    setMessageSent(false);
+    form.reset({ ...initialValues, inboxId: "" });
+    setContactStatus("idle");
+    setContactId(null);
+    setOriginInboxId("");
+    setNewContactName("");
+  };
+
+  if (true) {
+    return (
+      <div className="max-w-3xl mx-auto">
+        <Card className="border-green-200 dark:border-green-900/50 bg-linear-to-br from-green-50/50 to-background dark:from-green-950/20 dark:to-background">
+          <CardContent className="flex flex-col items-center justify-center py-16 px-6 text-center space-y-8">
+            <div className="relative">
+              <div className="absolute inset-0 bg-green-500/20 blur-3xl rounded-full animate-pulse" />
+              <Checkmark size={100} strokeWidth={5} color="#007950" />
+            </div>
+
+            <div className="space-y-3 max-w-md">
+              <h2 className="text-3xl font-bold text-green-700 dark:text-green-300">
+                Mensagem enviada!
+              </h2>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                O código e a senha foram enviados com sucesso para o paciente.
+              </p>
+            </div>
+
+            <div className="flex flex-col items-center gap-4 pt-4">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground bg-muted/50 px-4 py-2 rounded-full">
+                <Icons.WhatsApp className="size-4 fill-current" />
+                <span>Você pode fechar esta aba agora</span>
+              </div>
+
+              <Button
+                onClick={handleNewMessage}
+                variant="outline"
+                className="mt-2"
+              >
+                Enviar novamente
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-3xl mx-auto">
