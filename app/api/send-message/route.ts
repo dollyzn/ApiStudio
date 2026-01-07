@@ -7,6 +7,7 @@ interface SendMessagePayload {
   inboxId: number;
   codigo: string;
   senha: string;
+  contactId?: number;
   raw?: string;
 }
 
@@ -49,6 +50,7 @@ export async function POST(request: NextRequest) {
       inboxId: body.inboxId,
       codigo: body.codigo,
       senha: body.senha,
+      contactId: body.contactId ?? null,
       raw: body.raw ?? null,
       action: "sendMessage",
     };
