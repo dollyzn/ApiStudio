@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const authHeader = request.headers.get("authorization");
+    const authHeader = request.headers.get("authorization")?.replace(/"/g, "");
 
     if (!authHeader) {
       return NextResponse.json(
@@ -55,13 +55,26 @@ export async function POST(request: NextRequest) {
       action: "sendMessage",
     };
 
-    const { data } = await axios.post(env.N8N_WEBHOOK_URL, payloadToN8n, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: authHeader,
-      },
-      timeout: 5000,
-    });
+    const { data } = await axios.post(
+      `${env.N8N_WEBHOOK_URL}/messages/send`,
+      payloadToN8n,
+      {
+        headers: {
+          "x-api-key": authHeader,
+        },
+        timeout: 5000,
+      }
+    );
+
+    if (!data.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: data.message || "Erro ao enviar mensagem",
+        },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json(
       {

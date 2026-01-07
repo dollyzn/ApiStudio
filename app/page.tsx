@@ -15,7 +15,7 @@ export default function HomePage() {
   }, [token]);
 
   return (
-    <div className="min-h-screen h-px bg-linear-to-br from-background to-muted/20 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen h-px bg-linear-to-br from-background to-muted/20 pt-32 pb-12 px-4 sm:px-6 lg:px-8">
       <div className="fixed top-6 right-6 z-50">
         <ThemeToggle />
       </div>
