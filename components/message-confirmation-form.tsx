@@ -272,7 +272,7 @@ export default function MessageConfirmationForm() {
     setNewContactName("");
   };
 
-  if (true) {
+  if (messageSent) {
     return (
       <div className="max-w-3xl mx-auto">
         <Card className="border-green-200 dark:border-green-900/50 bg-linear-to-br from-green-50/50 to-background dark:from-green-950/20 dark:to-background">
