@@ -31,7 +31,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader2, Phone, Inbox, Key, Lock } from "lucide-react";
+import {
+  Loader2,
+  Phone,
+  Inbox,
+  Key,
+  Lock,
+  User,
+  CheckCircle2,
+} from "lucide-react";
 import { MessageConfirmationSkeleton } from "./message-confirmation-skeleton";
 import { api } from "@/lib/api";
 
@@ -42,6 +50,7 @@ interface MessageInbox {
 
 const formSchema = z.object({
   phone: z.string().min(1),
+  name: z.string().optional(),
   inboxId: z.string().min(1, "Selecione uma caixa de entrada"),
   codigo: z.string().min(1, "Informe o código"),
   senha: z.string().min(1, "Informe a senha"),
@@ -49,11 +58,22 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
+type ContactValidationStatus =
+  | "idle"
+  | "validating"
+  | "validated"
+  | "not-found"
+  | "error";
+
 export default function MessageConfirmationForm() {
   const searchParams = useSearchParams();
   const [inboxes, setInboxes] = useState<MessageInbox[]>([]);
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
+  const [contactStatus, setContactStatus] =
+    useState<ContactValidationStatus>("idle");
+  const [contactId, setContactId] = useState<number | null>(null);
+  const [isCreatingContact, setIsCreatingContact] = useState(false);
 
   const initialValues = useMemo(() => {
     const number = searchParams.get("number") || "";
@@ -65,6 +85,7 @@ export default function MessageConfirmationForm() {
 
     return {
       phone: number,
+      name: "",
       inboxId: "",
       codigo: codigoMatch?.[1] ?? "",
       senha: senhaMatch?.[1] ?? "",
@@ -93,7 +114,67 @@ export default function MessageConfirmationForm() {
     fetchInboxes();
   }, []);
 
+  const validateContact = async (phone: string) => {
+    if (!phone) {
+      toast.error("Informe o número de telefone");
+      return;
+    }
+
+    setContactStatus("validating");
+    setContactId(null);
+
+    try {
+      const res = await api.post("/api/contacts/validate", { phone });
+      const data = res.data;
+
+      if (data.match || data.payload) {
+        setContactId(data.contactId);
+        setContactStatus("validated");
+        toast.success("Contato encontrado!");
+      } else {
+        setContactStatus("not-found");
+        toast.info(
+          "Contato não encontrado. Informe o nome para criar um novo contato."
+        );
+      }
+    } catch (error) {
+      setContactStatus("error");
+      toast.error("Erro ao validar contato");
+    }
+  };
+
+  const createContact = async (phone: string, name: string) => {
+    if (!name) {
+      toast.error("Informe o nome do contato");
+      return;
+    }
+
+    setIsCreatingContact(true);
+
+    try {
+      const res = await api.post("/api/contacts/create", { phone, name });
+      const data = res.data;
+
+      if (data.success && data.contactId) {
+        setContactId(data.contactId);
+        setContactStatus("validated");
+        toast.success("Contato criado com sucesso!");
+      } else {
+        throw new Error("Erro ao criar contato");
+      }
+    } catch (error) {
+      toast.error("Erro ao criar contato");
+    } finally {
+      setIsCreatingContact(false);
+    }
+  };
+
   const onSubmit = async (values: FormValues) => {
+    if (contactStatus !== "validated" || !contactId) {
+      toast.error("Valide o contato antes de enviar a mensagem");
+      return;
+    }
+
     setSending(true);
 
     try {
@@ -102,6 +183,7 @@ export default function MessageConfirmationForm() {
         inboxId: Number(values.inboxId),
         codigo: values.codigo,
         senha: values.senha,
+        contactId: contactId,
       });
 
       const result = await res.data;
@@ -112,12 +194,27 @@ export default function MessageConfirmationForm() {
 
       toast.success("Mensagem enviada com sucesso");
       form.reset({ ...initialValues, inboxId: "" });
+      setContactStatus("idle");
+      setContactId(null);
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : "Erro ao enviar mensagem"
       );
     } finally {
       setSending(false);
+    }
+  };
+
+  const handleValidateContact = () => {
+    const phone = form.getValues("phone");
+    validateContact(phone);
+  };
+
+  const handleCreateContact = () => {
+    const phone = form.getValues("phone");
+    const name = form.getValues("name");
+    if (name) {
+      createContact(phone, name);
     }
   };
 
@@ -150,12 +247,85 @@ export default function MessageConfirmationForm() {
                         <Phone className="h-4 w-4" />
                         Número de telefone
                       </FormLabel>
-                      <FormControl>
-                        <Input {...field} readOnly className="font-mono" />
-                      </FormControl>
+                      <div className="flex gap-2">
+                        <FormControl>
+                          <Input
+                            {...field}
+                            readOnly
+                            className="font-mono flex-1"
+                          />
+                        </FormControl>
+                        <Button
+                          type="button"
+                          onClick={handleValidateContact}
+                          disabled={
+                            contactStatus === "validating" ||
+                            contactStatus === "validated"
+                          }
+                          variant={
+                            contactStatus === "validated"
+                              ? "default"
+                              : "outline"
+                          }
+                        >
+                          {contactStatus === "validating" ? (
+                            <>
+                              <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                              Validando...
+                            </>
+                          ) : contactStatus === "validated" ? (
+                            <>
+                              <CheckCircle2 className="h-4 w-4 mr-2" />
+                              Validado
+                            </>
+                          ) : (
+                            "Validar"
+                          )}
+                        </Button>
+                      </div>
                     </FormItem>
                   )}
                 />
+
+                {/* Name - só aparece quando contato não é encontrado */}
+                {contactStatus === "not-found" && (
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="flex items-center gap-2">
+                          <User className="h-4 w-4" />
+                          Nome do contato
+                        </FormLabel>
+                        <div className="flex gap-2">
+                          <FormControl>
+                            <Input
+                              {...field}
+                              placeholder="Digite o nome do contato"
+                              className="flex-1"
+                            />
+                          </FormControl>
+                          <Button
+                            type="button"
+                            onClick={handleCreateContact}
+                            disabled={isCreatingContact || !field.value}
+                          >
+                            {isCreatingContact ? (
+                              <>
+                                <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                                Criando...
+                              </>
+                            ) : (
+                              "Criar"
+                            )}
+                          </Button>
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
 
                 {/* Inbox */}
                 <FormField
@@ -170,6 +340,7 @@ export default function MessageConfirmationForm() {
                       <Select
                         value={field.value}
                         onValueChange={field.onChange}
+                        disabled={contactStatus !== "validated"}
                       >
                         <FormControl>
                           <SelectTrigger>
@@ -201,7 +372,11 @@ export default function MessageConfirmationForm() {
                           Código
                         </FormLabel>
                         <FormControl>
-                          <Input {...field} className="font-mono" />
+                          <Input
+                            {...field}
+                            className="font-mono"
+                            disabled={contactStatus !== "validated"}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -218,7 +393,11 @@ export default function MessageConfirmationForm() {
                           Senha
                         </FormLabel>
                         <FormControl>
-                          <Input {...field} className="font-mono" />
+                          <Input
+                            {...field}
+                            className="font-mono"
+                            disabled={contactStatus !== "validated"}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -228,7 +407,11 @@ export default function MessageConfirmationForm() {
 
                 {/* Actions */}
                 <div className="flex flex-col sm:flex-row gap-3 pt-2">
-                  <Button type="submit" disabled={sending} className="flex-1">
+                  <Button
+                    type="submit"
+                    disabled={sending || contactStatus !== "validated"}
+                    className="flex-1"
+                  >
                     {sending ? (
                       <>
                         <Loader2 className="h-4 w-4 animate-spin mr-2" />
@@ -242,7 +425,11 @@ export default function MessageConfirmationForm() {
                   <Button
                     type="button"
                     variant="outline"
-                    onClick={() => form.reset(initialValues)}
+                    onClick={() => {
+                      form.reset(initialValues);
+                      setContactStatus("idle");
+                      setContactId(null);
+                    }}
                     disabled={sending}
                     className="flex-1"
                   >
