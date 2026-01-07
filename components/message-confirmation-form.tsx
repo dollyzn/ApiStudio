@@ -197,8 +197,8 @@ export default function MessageConfirmationForm() {
       });
       const data = res.data;
 
-      if (data.success && data.contactId) {
-        setContactId(data.contactId);
+      if (data.success && data.data.payload.contact.id) {
+        setContactId(data.data.payload.contact.id);
         setContactStatus("validated");
         setShowOriginDialog(false);
         setOriginInboxId("");
