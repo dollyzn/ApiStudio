@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const authHeader = request.headers.get("authorization");
+    const authHeader = request.headers.get("authorization")?.replace(/"/g, "");
 
     if (!authHeader) {
       return NextResponse.json(

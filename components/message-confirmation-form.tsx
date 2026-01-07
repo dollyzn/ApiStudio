@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-
 import {
   Card,
   CardContent,
@@ -16,6 +15,15 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -34,14 +42,18 @@ import {
 import {
   Loader2,
   Phone,
-  Inbox,
   Key,
   Lock,
   User,
-  CheckCircle2,
+  Send,
+  UserCheck,
+  Inbox,
 } from "lucide-react";
 import { MessageConfirmationSkeleton } from "./message-confirmation-skeleton";
 import { api } from "@/lib/api";
+import { Icons } from "./ui/icons";
+import { PhoneInput } from "./ui/phone-input";
+import { parsePhoneNumber } from "react-phone-number-input";
 
 interface MessageInbox {
   id: number;
@@ -50,7 +62,6 @@ interface MessageInbox {
 
 const formSchema = z.object({
   phone: z.string().min(1),
-  name: z.string().optional(),
   inboxId: z.string().min(1, "Selecione uma caixa de entrada"),
   codigo: z.string().min(1, "Informe o código"),
   senha: z.string().min(1, "Informe a senha"),
@@ -74,6 +85,9 @@ export default function MessageConfirmationForm() {
     useState<ContactValidationStatus>("idle");
   const [contactId, setContactId] = useState<number | null>(null);
   const [isCreatingContact, setIsCreatingContact] = useState(false);
+  const [showOriginDialog, setShowOriginDialog] = useState(false);
+  const [newContactName, setNewContactName] = useState("");
+  const [originInboxId, setOriginInboxId] = useState("");
 
   const initialValues = useMemo(() => {
     const number = searchParams.get("number") || "";
@@ -84,8 +98,7 @@ export default function MessageConfirmationForm() {
     const senhaMatch = decodedBody.match(/\*Senha\*[:\s]*([^\s\n]+)/i);
 
     return {
-      phone: number,
-      name: "",
+      phone: parsePhoneNumber(number, "BR")?.number || number,
       inboxId: "",
       codigo: codigoMatch?.[1] ?? "",
       senha: senhaMatch?.[1] ?? "",
@@ -114,6 +127,22 @@ export default function MessageConfirmationForm() {
     fetchInboxes();
   }, []);
 
+  useEffect(() => {
+    // Reset contact validation when phone number changes
+    setContactStatus("idle");
+    setContactId(null);
+    setOriginInboxId("");
+    setNewContactName("");
+  }, [form.watch("phone")]);
+
+  useEffect(() => {
+    if (contactStatus !== "not-found") {
+      setShowOriginDialog(false);
+      setOriginInboxId("");
+      setNewContactName("");
+    }
+  }, [contactStatus]);
+
   const validateContact = async (phone: string) => {
     if (!phone) {
       toast.error("Informe o número de telefone");
@@ -127,7 +156,7 @@ export default function MessageConfirmationForm() {
       const res = await api.post("/api/contacts/validate", { phone });
       const data = res.data;
 
-      if (data.match || data.payload) {
+      if (data.success || data.contactId) {
         setContactId(data.contactId);
         setContactStatus("validated");
         toast.success("Contato encontrado!");
@@ -143,21 +172,37 @@ export default function MessageConfirmationForm() {
     }
   };
 
-  const createContact = async (phone: string, name: string) => {
-    if (!name) {
+  const createContact = async (
+    phone: string,
+    name: string,
+    inboxOriginId: string
+  ) => {
+    if (!name.trim()) {
       toast.error("Informe o nome do contato");
+      return;
+    }
+
+    if (!inboxOriginId) {
+      toast.error("Selecione a origem do contato");
       return;
     }
 
     setIsCreatingContact(true);
 
     try {
-      const res = await api.post("/api/contacts/create", { phone, name });
+      const res = await api.post("/api/contacts/create", {
+        phone,
+        name: name.trim(),
+        inboxOriginId: Number(inboxOriginId),
+      });
       const data = res.data;
 
       if (data.success && data.contactId) {
         setContactId(data.contactId);
         setContactStatus("validated");
+        setShowOriginDialog(false);
+        setOriginInboxId("");
+        setNewContactName("");
         toast.success("Contato criado com sucesso!");
       } else {
         throw new Error("Erro ao criar contato");
@@ -212,10 +257,7 @@ export default function MessageConfirmationForm() {
 
   const handleCreateContact = () => {
     const phone = form.getValues("phone");
-    const name = form.getValues("name");
-    if (name) {
-      createContact(phone, name);
-    }
+    createContact(phone, newContactName, originInboxId);
   };
 
   return (
@@ -237,131 +279,202 @@ export default function MessageConfirmationForm() {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="space-y-6"
               >
-                {/* Phone */}
-                <FormField
-                  control={form.control}
-                  name="phone"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="flex items-center gap-2">
-                        <Phone className="h-4 w-4" />
-                        Número de telefone
-                      </FormLabel>
-                      <div className="flex gap-2">
-                        <FormControl>
-                          <Input
-                            {...field}
-                            readOnly
-                            className="font-mono flex-1"
-                          />
-                        </FormControl>
-                        <Button
-                          type="button"
-                          onClick={handleValidateContact}
-                          disabled={
-                            contactStatus === "validating" ||
-                            contactStatus === "validated"
-                          }
-                          variant={
-                            contactStatus === "validated"
-                              ? "default"
-                              : "outline"
-                          }
-                        >
-                          {contactStatus === "validating" ? (
-                            <>
-                              <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                              Validando...
-                            </>
-                          ) : contactStatus === "validated" ? (
-                            <>
-                              <CheckCircle2 className="h-4 w-4 mr-2" />
-                              Validado
-                            </>
-                          ) : (
-                            "Validar"
-                          )}
-                        </Button>
-                      </div>
-                    </FormItem>
-                  )}
-                />
-
-                {/* Name - só aparece quando contato não é encontrado */}
-                {contactStatus === "not-found" && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Phone */}
                   <FormField
                     control={form.control}
-                    name="name"
+                    name="phone"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="flex items-center gap-2">
-                          <User className="h-4 w-4" />
-                          Nome do contato
+                          <Phone className="h-4 w-4" />
+                          Número de telefone
                         </FormLabel>
                         <div className="flex gap-2">
                           <FormControl>
-                            <Input
+                            <PhoneInput
                               {...field}
-                              placeholder="Digite o nome do contato"
-                              className="flex-1"
+                              className="w-full"
+                              defaultCountry="BR"
+                              placeholder="Informe o número de telefone"
                             />
                           </FormControl>
                           <Button
                             type="button"
-                            onClick={handleCreateContact}
-                            disabled={isCreatingContact || !field.value}
+                            onClick={handleValidateContact}
+                            disabled={
+                              contactStatus === "validating" ||
+                              contactStatus === "validated"
+                            }
+                            variant={
+                              contactStatus === "validated"
+                                ? "default"
+                                : "outline"
+                            }
                           >
-                            {isCreatingContact ? (
+                            {contactStatus === "validating" ? (
                               <>
-                                <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                                Criando...
+                                <Loader2 className="size-4 animate-spin" />
+                                Validando...
+                              </>
+                            ) : contactStatus === "validated" ? (
+                              <>
+                                <UserCheck className="size-4" />
+                                Validado
                               </>
                             ) : (
-                              "Criar"
+                              "Validar"
                             )}
                           </Button>
                         </div>
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Origem e nome em dialog - aparecem apenas quando contato não é encontrado */}
+                  {contactStatus === "not-found" && (
+                    <div className="mt-auto flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground bg-input/30 px-2 rounded-md border h-9 w-full">
+                        <Inbox className="h-4 w-4" />
+                        Contato não encontrado.
+                      </div>
+                      <Dialog
+                        open={showOriginDialog}
+                        onOpenChange={setShowOriginDialog}
+                      >
+                        <DialogTrigger asChild>
+                          <Button variant="outline">Criar</Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-lg">
+                          <DialogHeader>
+                            <DialogTitle>Criar novo contato</DialogTitle>
+                            <DialogDescription>
+                              Selecione a caixa de entrada de onde este contato
+                              chegou e dê um nome para salvá-lo.
+                            </DialogDescription>
+                          </DialogHeader>
+
+                          <div className="space-y-4">
+                            <div className="space-y-2">
+                              <label className="flex items-center gap-2 text-sm font-medium">
+                                <Icons.WhatsApp className="size-4 fill-current" />
+                                Caixa de origem do contato
+                              </label>
+                              <Select
+                                value={originInboxId}
+                                onValueChange={setOriginInboxId}
+                              >
+                                <SelectTrigger className="w-full">
+                                  <SelectValue placeholder="Escolha de onde veio este contato" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {inboxes.map((inbox) => (
+                                    <SelectItem
+                                      key={inbox.id}
+                                      value={String(inbox.id)}
+                                    >
+                                      {inbox.name}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+
+                            <div className="space-y-2">
+                              <label className="flex items-center gap-2 text-sm font-medium">
+                                <User className="h-4 w-4" />
+                                Nome do contato
+                              </label>
+                              <Input
+                                value={newContactName}
+                                onChange={(e) =>
+                                  setNewContactName(e.target.value)
+                                }
+                                placeholder="Digite o nome do contato"
+                                onKeyDown={(e) => {
+                                  if (
+                                    e.key === "Enter" &&
+                                    originInboxId &&
+                                    newContactName.trim()
+                                  ) {
+                                    e.preventDefault();
+                                    handleCreateContact();
+                                  }
+                                }}
+                              />
+                            </div>
+                          </div>
+                          <DialogFooter>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              onClick={() => setShowOriginDialog(false)}
+                            >
+                              Cancelar
+                            </Button>
+                            <Button
+                              type="button"
+                              onClick={handleCreateContact}
+                              disabled={
+                                isCreatingContact ||
+                                !originInboxId ||
+                                !newContactName.trim()
+                              }
+                            >
+                              {isCreatingContact ? (
+                                <>
+                                  <Loader2 className="size-4 animate-spin" />
+                                  Criando...
+                                </>
+                              ) : (
+                                "Criar contato"
+                              )}
+                            </Button>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
+                    </div>
+                  )}
+
+                  {/* Inbox */}
+                  <FormField
+                    control={form.control}
+                    name="inboxId"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="flex items-center gap-2">
+                          <Icons.WhatsApp className="size-4 fill-current" />
+                          Caixa de entrada
+                        </FormLabel>
+                        <Select
+                          value={field.value}
+                          onValueChange={field.onChange}
+                          disabled={contactStatus !== "validated"}
+                        >
+                          <FormControl>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Selecione uma inbox" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {inboxes.map((inbox) => (
+                              <SelectItem
+                                key={inbox.id}
+                                value={String(inbox.id)}
+                              >
+                                {inbox.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                )}
+                </div>
 
-                {/* Inbox */}
-                <FormField
-                  control={form.control}
-                  name="inboxId"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="flex items-center gap-2">
-                        <Inbox className="h-4 w-4" />
-                        Caixa de entrada
-                      </FormLabel>
-                      <Select
-                        value={field.value}
-                        onValueChange={field.onChange}
-                        disabled={contactStatus !== "validated"}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecione uma inbox" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {inboxes.map((inbox) => (
-                            <SelectItem key={inbox.id} value={String(inbox.id)}>
-                              {inbox.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {/* Código / Senha */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Código / Senha */}
                   <FormField
                     control={form.control}
                     name="codigo"
@@ -414,11 +527,14 @@ export default function MessageConfirmationForm() {
                   >
                     {sending ? (
                       <>
-                        <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                        <Loader2 className="size-4 animate-spin" />
                         Enviando...
                       </>
                     ) : (
-                      "Enviar mensagem"
+                      <>
+                        <Send className="size-4" />
+                        Enviar Mensagem
+                      </>
                     )}
                   </Button>
 
@@ -429,6 +545,8 @@ export default function MessageConfirmationForm() {
                       form.reset(initialValues);
                       setContactStatus("idle");
                       setContactId(null);
+                      setOriginInboxId("");
+                      setNewContactName("");
                     }}
                     disabled={sending}
                     className="flex-1"
