@@ -93,8 +93,8 @@ export default function MessageConfirmationForm() {
   const [originInboxId, setOriginInboxId] = useState("");
 
   const initialValues = useMemo(() => {
-    const number = searchParams.get("number") || "";
-    const body = searchParams.get("body") || "";
+    const number = searchParams.get("phone") || "";
+    const body = searchParams.get("text") || "";
     const decodedBody = decodeURIComponent(body);
 
     const codigoMatch = decodedBody.match(/\*Código\*[:\s]*([^\s\n]+)/i);
