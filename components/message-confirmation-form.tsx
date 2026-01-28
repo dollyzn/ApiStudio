@@ -91,6 +91,7 @@ export default function MessageConfirmationForm() {
   const [showOriginDialog, setShowOriginDialog] = useState(false);
   const [newContactName, setNewContactName] = useState("");
   const [originInboxId, setOriginInboxId] = useState("");
+  const [hasAutoValidated, setHasAutoValidated] = useState(false);
 
   const initialValues = useMemo(() => {
     const number = searchParams.get("number") || "";
@@ -136,10 +137,25 @@ export default function MessageConfirmationForm() {
     setContactId(null);
     setOriginInboxId("");
     setNewContactName("");
+    setHasAutoValidated(false);
   }, [form.watch("phone")]);
 
   useEffect(() => {
-    if (contactStatus !== "not-found") {
+    if (
+      !loading &&
+      inboxes.length > 0 &&
+      initialValues.phone &&
+      !hasAutoValidated
+    ) {
+      validateContact(initialValues.phone);
+      setHasAutoValidated(true);
+    }
+  }, [loading, inboxes.length]);
+
+  useEffect(() => {
+    if (contactStatus === "not-found") {
+      setShowOriginDialog(true);
+    } else {
       setShowOriginDialog(false);
       setOriginInboxId("");
       setNewContactName("");
@@ -203,6 +219,7 @@ export default function MessageConfirmationForm() {
       if (data.success && data.contactId) {
         setContactId(data.contactId);
         setContactStatus("validated");
+        form.setValue("inboxId", inboxOriginId);
         setShowOriginDialog(false);
         setOriginInboxId("");
         setNewContactName("");
