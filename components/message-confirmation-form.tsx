@@ -166,7 +166,7 @@ export default function MessageConfirmationForm() {
       } else {
         setContactStatus("not-found");
         toast.info(
-          "Contato não encontrado. Informe o nome para criar um novo contato."
+          "Contato não encontrado. Informe o nome para criar um novo contato.",
         );
       }
     } catch (error) {
@@ -178,7 +178,7 @@ export default function MessageConfirmationForm() {
   const createContact = async (
     phone: string,
     name: string,
-    inboxOriginId: string
+    inboxOriginId: string,
   ) => {
     if (!name.trim()) {
       toast.error("Informe o nome do contato");
@@ -246,7 +246,7 @@ export default function MessageConfirmationForm() {
       toast.error(
         error instanceof AxiosError
           ? error.response?.data?.error || "Erro ao enviar mensagem"
-          : "Erro ao enviar mensagem"
+          : "Erro ao enviar mensagem",
       );
     } finally {
       setSending(false);
@@ -599,7 +599,7 @@ export default function MessageConfirmationForm() {
                       setOriginInboxId("");
                       setNewContactName("");
                     }}
-                    disabled={sending}
+                    disabled={sending || contactStatus !== "validated"}
                     className="flex-1"
                   >
                     Cancelar
