@@ -60,6 +60,7 @@ import { AxiosError } from "axios";
 import Checkmark from "./ui/checkmark";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { usePrinter } from "@/contexts/printer-provider";
+import { sleep } from "@/lib/utils";
 
 interface MessageInbox {
   id: number;
@@ -98,6 +99,7 @@ export default function MessageConfirmationForm() {
   const [newContactName, setNewContactName] = useState("");
   const [originInboxId, setOriginInboxId] = useState("");
   const [hasAutoValidated, setHasAutoValidated] = useState(false);
+  const [isPrintDisabled, setIsPrintDisabled] = useState(false);
 
   const initialValues = useMemo(() => {
     const number = searchParams.get("number") || "";
@@ -296,10 +298,20 @@ export default function MessageConfirmationForm() {
   };
 
   const handlePrint = async () => {
-    const codigo = form.getValues("codigo");
-    const senha = form.getValues("senha");
+    try {
+      setIsPrintDisabled(true);
 
-    await printSenha({ codigo, senha });
+      const codigo = form.getValues("codigo");
+      const senha = form.getValues("senha");
+
+      const result = await printSenha({ codigo, senha });
+
+      if (result.success) {
+        await sleep(4000);
+      }
+    } finally {
+      setIsPrintDisabled(false);
+    }
   };
 
   if (messageSent) {
@@ -356,7 +368,7 @@ export default function MessageConfirmationForm() {
             <CardAction>
               <Tooltip delayDuration={1000}>
                 <TooltipTrigger asChild>
-                  <Button onClick={handlePrint}>
+                  <Button onClick={handlePrint} disabled={isPrintDisabled}>
                     <Printer />
                   </Button>
                 </TooltipTrigger>
