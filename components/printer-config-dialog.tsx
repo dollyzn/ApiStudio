@@ -204,13 +204,48 @@ export function PrinterConfigDialog({ disabled }: { disabled?: boolean }) {
 
           {/* Instruções */}
           {!isConnected && (
-            <div className="rounded-md bg-muted p-3 text-sm">
-              <p className="font-medium mb-1">Instruções:</p>
+            <div className="rounded-md bg-input/20 border p-3 text-sm">
+              <p className="font-medium mb-2">Instruções para conexão:</p>
+
               <ol className="list-decimal list-inside space-y-1 text-muted-foreground">
-                <li>Certifique-se de que o QZ Tray está instalado</li>
-                <li>Verifique se o QZ Tray está em execução</li>
-                <li>Clique em "Conectar ao QZ Tray"</li>
-                <li>Selecione sua impressora térmica</li>
+                <li>
+                  Baixe e instale o QZ Tray em seu computador:
+                  <br />
+                  <a
+                    href="https://qz.io/download/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline"
+                  >
+                    https://qz.io/download/
+                  </a>
+                </li>
+
+                <li>
+                  Após a instalação, certifique-se de que o QZ Tray esteja em
+                  execução
+                </li>
+
+                <li>
+                  Instale o certificado de segurança necessário:
+                  <br />
+                  <a
+                    href={`${window.location.origin}/qz-cert.crt`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline"
+                  >
+                    {`${window.location.origin}/qz-cert.crt`}
+                  </a>
+                </li>
+
+                <li>
+                  Clique em <strong>"Conectar ao QZ Tray"</strong>
+                </li>
+
+                <li>
+                  Selecione sua impressora térmica para finalizar a configuração
+                </li>
               </ol>
             </div>
           )}
