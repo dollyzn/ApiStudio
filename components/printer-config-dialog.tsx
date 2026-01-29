@@ -89,6 +89,8 @@ export function PrinterConfigDialog({ disabled }: { disabled?: boolean }) {
     }
   };
 
+  const origin = typeof window !== "undefined" ? window.location.origin : "";
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -230,12 +232,12 @@ export function PrinterConfigDialog({ disabled }: { disabled?: boolean }) {
                   Instale o certificado de segurança necessário:
                   <br />
                   <a
-                    href={`${window.location.origin}/qz-cert.crt`}
+                    href={`${origin}/qz-cert.crt`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="underline"
                   >
-                    {`${window.location.origin}/qz-cert.crt`}
+                    {`${origin}/qz-cert.crt`}
                   </a>
                 </li>
 
