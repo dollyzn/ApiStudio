@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
@@ -48,6 +49,7 @@ import {
   Send,
   UserCheck,
   Inbox,
+  Printer,
 } from "lucide-react";
 import { MessageConfirmationSkeleton } from "./message-confirmation-skeleton";
 import { api } from "@/lib/api";
@@ -56,6 +58,8 @@ import { PhoneInput } from "./ui/phone-input";
 import { parsePhoneNumber } from "react-phone-number-input";
 import { AxiosError } from "axios";
 import Checkmark from "./ui/checkmark";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+import { usePrinter } from "@/contexts/printer-provider";
 
 interface MessageInbox {
   id: number;
@@ -80,6 +84,8 @@ type ContactValidationStatus =
 
 export default function MessageConfirmationForm() {
   const searchParams = useSearchParams();
+  const { printSenha } = usePrinter();
+
   const [inboxes, setInboxes] = useState<MessageInbox[]>([]);
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
@@ -289,6 +295,13 @@ export default function MessageConfirmationForm() {
     setNewContactName("");
   };
 
+  const handlePrint = async () => {
+    const codigo = form.getValues("codigo");
+    const senha = form.getValues("senha");
+
+    await printSenha({ codigo, senha });
+  };
+
   if (messageSent) {
     return (
       <div className="max-w-3xl mx-auto">
@@ -339,6 +352,19 @@ export default function MessageConfirmationForm() {
             <CardDescription>
               Revise os dados antes de confirmar o envio
             </CardDescription>
+
+            <CardAction>
+              <Tooltip delayDuration={1000}>
+                <TooltipTrigger asChild>
+                  <Button onClick={handlePrint}>
+                    <Printer />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">
+                  Imprimir código e senha
+                </TooltipContent>
+              </Tooltip>
+            </CardAction>
           </CardHeader>
 
           <CardContent>

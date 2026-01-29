@@ -8,6 +8,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { fontMono, fontSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import { AuthProvider } from "@/contexts/auth-provider";
+import { PrinterProvider } from "@/contexts/printer-provider";
 
 export const metadata: Metadata = {
   title: "API Studio - Chatwoot",
@@ -36,8 +37,10 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AuthProvider>
-            {children}
-            <Toaster closeButton richColors />
+            <PrinterProvider autoConnect>
+              {children}
+              <Toaster closeButton richColors />
+            </PrinterProvider>
           </AuthProvider>
         </ThemeProvider>
       </body>
