@@ -196,7 +196,9 @@ export function PrinterProvider({
         });
 
         if (result.success) {
-          toast.success(`Senha ${options.codigo} impressa com sucesso`);
+          toast.success(
+            `Código e senha '${options.codigo}' impressos com sucesso`,
+          );
         } else {
           toast.error(result.error || "Erro ao imprimir");
         }

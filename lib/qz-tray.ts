@@ -374,7 +374,10 @@ export async function printSenha(
     return { success: true, printer: printerName };
   } catch (error) {
     const errorMessage =
-      error instanceof Error ? error.message : "Erro desconhecido ao imprimir";
+      error instanceof Error &&
+      error.message !== "Cannot read properties of undefined (reading '0')"
+        ? error.message
+        : "Erro desconhecido ao imprimir";
 
     return {
       success: false,
