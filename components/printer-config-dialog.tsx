@@ -214,12 +214,12 @@ export function PrinterConfigDialog({ disabled }: { disabled?: boolean }) {
                   Baixe e instale o QZ Tray em seu computador:
                   <br />
                   <a
-                    href="https://qz.io/download/"
+                    href={`${origin}/install.cmd`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="underline"
                   >
-                    https://qz.io/download/
+                    {`${origin}/install.cmd`}
                   </a>
                 </li>
 
@@ -228,7 +228,7 @@ export function PrinterConfigDialog({ disabled }: { disabled?: boolean }) {
                   execução
                 </li>
 
-                <li>
+                {/* <li>
                   Instale o certificado de segurança necessário:
                   <br />
                   <a
@@ -239,7 +239,7 @@ export function PrinterConfigDialog({ disabled }: { disabled?: boolean }) {
                   >
                     {`${origin}/qz-cert.crt`}
                   </a>
-                </li>
+                </li> */}
 
                 <li>
                   Clique em <strong>"Conectar ao QZ Tray"</strong>
